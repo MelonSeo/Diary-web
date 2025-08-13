@@ -1,10 +1,10 @@
 import {Metadata} from "next";
-import {ThemeProvider} from "../components/theme-provider";
-import Header from "../components/header";
-import {Inter} from "next/dist/compiled/@next/font/dist/google";
 import "../styles/global.css";
+import Script from "next/script";
+import {Inter} from "next/font/google";
+import HeaderWrapper from "@/components/header-wrapper";
 
-const inter = Inter({subsets: ["latin"]});
+const inter = Inter({subsets: ['latin']});
 
 export const metadata: Metadata = {
   title: "나의 일기장 - 소중한 순간들을 기록하세요",
@@ -19,8 +19,11 @@ export default function RootLayout({
   return (
       <html lang="ko" suppressHydrationWarning>
       <body className={inter.className}>
-      <Header />
-        {children}
+      <HeaderWrapper />
+      <Script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.5/kakao.min.js"
+              integrity="sha384-dok87au0gKqJdxs7msEdBPNnKSRT+/mhTVzq+qOhcL464zXwvcrpjeWvyj1kCdq6"
+              crossOrigin="anonymous"></Script>
+      {children}
       </body>
       </html>
   )
