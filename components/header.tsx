@@ -6,10 +6,10 @@ import Link from "next/link" // Next.js Link 컴포넌트 추가
 import { Button } from "@/components/ui/button" // shadcn/ui 버튼
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu" // shadcn/ui 드롭다운 메뉴
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar" // shadcn/ui 아바타
-import { apiClient } from "@/lib/api-client" // API 클라이언트
 import { destroyCookie } from "nookies" // nookies 라이브러리 임포트: 클라이언트/서버 통합 쿠키 관리를 위해 사용
 import styles from "@/styles/Header.module.css" // Import the CSS Module
-import type { UserProfile } from "@/types/diary" // UserProfile 타입 임포트
+import type { UserProfile } from "@/types/diary"
+import {getUserProfile, logout} from "@/lib/client-api"; // UserProfile 타입 임포트
 
 /**
  * @file components/header.tsx
@@ -31,7 +31,7 @@ export default function Header() {
     useEffect(() => {
         const fetchUserInfo = async () => {
             try {
-                const response = await apiClient.getUserProfile() // API 클라이언트를 통해 사용자 정보 조회
+                const response = await getUserProfile() // API 클라이언트를 통해 사용자 정보 조회
                 setUser(response) // 조회된 사용자 정보로 상태 업데이트
             } catch (error) {
                 console.warn("Failed to fetch user info:", error)
@@ -56,17 +56,11 @@ export default function Header() {
     // 2. 로그아웃 처리 함수
     const handleLogout = async () => {
         try {
-            await apiClient.post("/auth/logout") // 백엔드 로그아웃 API 호출
+            await logout(); // 백엔드 로그아웃 API 호출
         } catch (error) {
             console.warn("Logout API call failed:", error)
             // API 서버가 없어도 클라이언트 측 로그아웃은 진행
         }
-
-        // nookies를 사용하여 accessToken과 refreshToken 쿠키 삭제
-        // `null`은 클라이언트 사이드 컨텍스트를 의미하며, `path: "/"`는 모든 경로에서 쿠키를 삭제
-        destroyCookie(null, "accessToken", { path: "/" })
-        destroyCookie(null, "refreshToken", { path: "/" })
-        // 로그인 페이지로 리다이렉트하여 세션 종료
         window.location.href = "/login"
     }
 

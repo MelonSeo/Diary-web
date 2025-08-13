@@ -32,6 +32,32 @@ async function apiRequest(req: NextRequest, method: string) {
             return NextResponse.json({error: "endpoint 누락"}, {status: 400});
         }
 
+        // @description logout 요청 시 백엔드 로그아웃 호출 후 여부 관계없이 쿠키 삭제
+        if (endpoint === "/auth/logout") {
+            const isProd = process.env.NODE_ENV === "production";
+
+            // 백엔드 로그아웃 호출 (바디 없음)
+            const backendRes = await fetch(`${API_BASE}/auth/logout`, {
+                method: "POST",
+                headers: {
+                    ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {})
+                }
+            });
+
+            let resBody: any = { success: true };
+
+            if (!backendRes.ok) {
+                const errorText = await backendRes.text().catch(() => "Logout failed");
+                resBody = { success: false, error: errorText };
+            }
+
+            const res = NextResponse.json(resBody, { status: 200 });
+            res.cookies.delete("accessToken");
+            res.cookies.delete("refreshToken");
+
+            return res;
+        }
+
         const config: RequestInit = {
             method,
             headers: {
@@ -73,9 +99,9 @@ async function apiRequest(req: NextRequest, method: string) {
             ...(data ? {"Content-Type": "application/json"} : {}),
             },
             });
-
             return await resWithCookies(backendResponse, cookieCarrier);
         }
+
         return await res(backendResponse);
     } catch (e) {
         return NextResponse.json({ error: e.message || "Proxy error" }, { status: 500 });

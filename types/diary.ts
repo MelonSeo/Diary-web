@@ -41,17 +41,6 @@ export interface CreateDiaryRequest {
     images?: File[] // 첨부할 이미지 파일 배열 (선택적)
 }
 
-/**
- * @interface ApiResponse
- * @description 모든 API 응답의 기본 구조를 정의합니다.
- *              데이터, 메시지, 상태 코드를 포함합니다.
- * @template T - 실제 응답 데이터의 타입.
- */
-export interface ApiResponse<T> {
-    data: T // API 응답의 실제 데이터
-    message?: string // 응답 메시지 (성공 또는 에러 설명)
-    status: "success" | "error" // 응답 상태 (성공 또는 에러)
-}
 
 /**
  * @interface PaginatedResponse
@@ -85,19 +74,10 @@ export interface UserProfile {
 }
 
 /**
- * @interface UpdateUserProfileRequest
+ * @interface UpdateUserProfile
  * @description 사용자 프로필 수정 요청 데이터 구조를 정의합니다.
  */
-export interface UpdateUserProfileRequest {
+export interface UpdateUserProfile {
     username?: string // 수정할 사용자 이름 (선택적)
     profileImageUrl?: string // 수정할 프로필 이미지 URL (선택적)
-}
-
-/**
- * @interface ReissueTokenResponse
- * @description 토큰 재발급 응답 데이터 구조를 정의합니다.
- */
-export interface ReissueTokenResponse {
-    tokenType: string // 토큰 타입 (예: "Bearer")
-    accessToken: string // 새로 발급된 액세스 토큰
 }

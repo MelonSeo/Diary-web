@@ -7,10 +7,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { apiClient } from "@/lib/api-client"
-import type { UserProfile, UpdateUserProfileRequest } from "@/types/diary"
-import { destroyCookie } from "nookies"
-import styles from "@/styles/UserProfileForm.module.css" // CSS Modules 임포트
+import type { UserProfile, UpdateUserProfile } from "@/types/diary"
+import styles from "@/styles/UserProfileForm.module.css"
+import {deleteUser, getUserProfile, logout, updateUserProfile} from "@/lib/client-api"; // CSS Modules 임포트
 
 /**
  * @file components/user-profile-form.tsx
@@ -31,7 +30,7 @@ export default function UserProfileForm() {
     useEffect(() => {
         const fetchUserProfile = async () => {
             try {
-                const response = await apiClient.getUserProfile()
+                const response = await getUserProfile()
                 setUser(response)
                 setUsername(response.username)
                 setProfileImageUrl(response.profileImageUrl || "")
@@ -69,14 +68,13 @@ export default function UserProfileForm() {
                 return
             }
 
-            const updateData: UpdateUserProfileRequest = {
+            const updateData: UpdateUserProfile = {
                 username: username.trim(),
                 profileImageUrl: profileImageUrl.trim() || undefined, // 빈 문자열이면 undefined로 보내지 않음
             }
 
             try {
-                const response = await apiClient.updateUserProfile(updateData)
-                setUser(response)
+                const response = await updateUserProfile(updateData)
                 setUsername(response.username)
                 setProfileImageUrl(response.profileImageUrl || "")
                 alert("프로필이 성공적으로 업데이트되었습니다!")
@@ -95,11 +93,10 @@ export default function UserProfileForm() {
             }
 
             try {
-                await apiClient.deleteUser()
-                destroyCookie(null, "accessToken", { path: "/" })
-                destroyCookie(null, "refreshToken", { path: "/" })
+                await deleteUser();
+                await logout();
                 alert("계정이 성공적으로 삭제되었습니다. 로그인 페이지로 이동합니다.")
-                router.push("/login")
+                window.location.href = "/login"
             } catch (err) {
                 console.error("Failed to delete account:", err)
                 setError("계정 삭제에 실패했습니다. 다시 시도해주세요.")
