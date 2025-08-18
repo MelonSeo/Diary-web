@@ -2,6 +2,7 @@
 
 import {useEffect, useTransition} from "react";
 import styles from "@/styles/LoginForm.module.css";
+import {signIn} from "next-auth/react";
 
 declare global {
     interface Window {
@@ -82,14 +83,14 @@ export default function LoginForm({errorMessage}: LoginFormProps) {
                     </button>
 
                     {/* 구글 로그인 버튼 */}
-                    {/*<button
-                        onClick={handleGoogleLogin} // 클릭 이벤트 핸들러
+                    {<button
+                        onClick={() =>signIn("google")} // 클릭 이벤트 핸들러
                         disabled={isPending} // 전환(transition)이 보류 중일 때 버튼 비활성화
                         // CSS Modules 클래스 적용: 기본 버튼 스타일, 구글 버튼 스타일, 로딩 상태 스타일
                         className={`${styles.loginButton} ${styles.googleButton} ${isPending ? styles.loading : ""}`}
                     >
-                        {isPending ? "연결 중..." : "구글로 로그인"}  로딩 상태에 따라 텍스트 변경
-                    </button>*/}
+                        {isPending ? "연결 중..." : "구글로 로그인"} {/*로딩 상태에 따라 텍스트 변경*/}
+                    </button>}
                 </div>
             </div>
         </div>
