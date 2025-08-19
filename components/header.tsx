@@ -6,7 +6,6 @@ import Link from "next/link" // Next.js Link 컴포넌트 추가
 import { Button } from "@/components/ui/button" // shadcn/ui 버튼
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu" // shadcn/ui 드롭다운 메뉴
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar" // shadcn/ui 아바타
-import { destroyCookie } from "nookies" // nookies 라이브러리 임포트: 클라이언트/서버 통합 쿠키 관리를 위해 사용
 import styles from "@/styles/Header.module.css" // Import the CSS Module
 import type { UserProfile } from "@/types/diary"
 import {getUserProfile, logout} from "@/lib/client-api"; // UserProfile 타입 임포트
@@ -36,7 +35,7 @@ export default function Header() {
             } catch (error) {
                 console.warn("Failed to fetch user info:", error)
                 // API 서버가 연결되지 않았을 때 목업 데이터 사용
-                if (error instanceof Error && error.message.includes("API_SERVER_UNAVAILABLE")) {
+                if (error instanceof Error) {
                     setUser({
                         id: "mock-user-1",
                         username: "테스트 사용자", // 'name' 대신 'username' 사용

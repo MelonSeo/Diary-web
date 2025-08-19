@@ -38,7 +38,7 @@ export default function UserProfileForm() {
                 console.error("Failed to fetch user profile:", err)
                 setError("프로필 정보를 불러오는 데 실패했습니다.")
                 // API 서버 연결 실패 시 목업 데이터 사용
-                if (err instanceof Error && err.message.includes("API_SERVER_UNAVAILABLE")) {
+                if (err instanceof Error) {
                     const mockUser: UserProfile = {
                         id: "mock-user-1",
                         username: "테스트 사용자",
@@ -138,7 +138,7 @@ export default function UserProfileForm() {
             <div className={styles.mainContent}>
                 <div className={styles.headerSection}>
                     <Button variant="ghost" onClick={() => router.back()} className={styles.backButton}>
-                        <ArrowLeft className={styles.backButton.split(" ").find((cls) => cls.includes("svg"))} />
+                        <ArrowLeft className="w-4 h-4" />
                         뒤로가기
                     </Button>
                     <h1 className={styles.title}>내 정보</h1>
@@ -165,11 +165,11 @@ export default function UserProfileForm() {
                             </div>
                             <div className={styles.profileDetails}>
                                 <p className={styles.usernameText}>
-                                    <User className={styles.usernameText.split(" ").find((cls) => cls.includes("svg"))} />
+                                    <User className="w-4 h-4" />
                                     {user?.username}
                                 </p>
                                 <p className={styles.emailText}>
-                                    <Mail className={styles.emailText.split(" ").find((cls) => cls.includes("svg"))} />
+                                    <Mail className="w-4 h-4" />
                                     {user?.email}
                                 </p>
                                 {/*<p className={styles.createdAtText}>

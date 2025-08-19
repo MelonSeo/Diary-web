@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "next dev"
+        "dev": "next dev",
+    "gemini": "npx https://github.com/google-gemini/gemini-cli"
   },
   "repository": {
     "type": "git",

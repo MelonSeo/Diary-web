@@ -20,7 +20,6 @@ export const authOptions : AuthOptions = {
         async redirect({baseUrl}) {
             console.log("@@@@@@@redirect");
             const target = new URL("auth/loading?next=/", baseUrl);
-            console.log(baseUrl);
             return target.toString();
         }
     }

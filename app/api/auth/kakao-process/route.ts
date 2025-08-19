@@ -108,19 +108,20 @@ export async function POST(request: NextRequest) {
         // 4. JWT 토큰을 httpOnly 쿠키에 저장
         const response = NextResponse.json({ success: true })
         const isProduction = process.env.NODE_ENV === "production"
-        const cookieOptions = {
-            httpOnly: true, // JavaScript에서 접근 불가
-            secure: isProduction, // 프로덕션 환경에서만 HTTPS 강제
-            sameSite: "lax" as const, // CSRF 보호
-            path: "/", // 모든 경로에서 유효
-        }
 
-        setCookie({ res: response }, "accessToken", accessToken, {
-            ...cookieOptions,
-            maxAge: 60 * 60 , // 1시간 유효
+        response.cookies.set("accessToken", accessToken, {
+            httpOnly: true,
+            secure: isProduction,
+            sameSite: "lax",
+            path: "/",
+            maxAge: 60 * 60, // 1시간 유효
         })
-        setCookie({ res: response }, "refreshToken", refreshToken, {
-            ...cookieOptions,
+
+        response.cookies.set("refreshToken", refreshToken, {
+            httpOnly: true,
+            secure: isProduction,
+            sameSite: "lax",
+            path: "/",
             maxAge: 60 * 60 * 24 * 7, // 7일 유효
         })
 
@@ -138,3 +139,4 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: "Internal server error during Kakao login." }, { status: 500 })
     }
 }
+

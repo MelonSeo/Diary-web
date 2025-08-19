@@ -15,7 +15,7 @@ export interface DiaryEntry {
     images: DiaryImage[] // 일기에 첨부된 이미지 배열
     createdAt: string // 일기 생성 날짜 (ISO 8601 형식 문자열)
     updatedAt: string // 일기 마지막 업데이트 날짜 (ISO 8601 형식 문자열)
-    uid: string
+    uid?: string
 }
 
 /**

@@ -22,17 +22,40 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap; /* ��응형을 위해 추가 */
 }
 
 .leftSection {
     display: flex;
     align-items: center;
     gap: 1rem; /* space-x-4 */
+    flex-wrap: wrap; /* 반응형을 위해 추가 */
 }
 
 .title {
     font-size: 1.25rem; /* text-xl */
     font-weight: 700; /* font-bold */
+    color: #111827; /* text-gray-900 */
+    text-decoration: none; /* Link 스타일 제거 */
+    white-space: nowrap; /* 줄바꿈 방지 */
+}
+
+/* 내비게이션 스타일 */
+.navigation {
+    display: flex;
+    gap: 1rem; /* space-x-4 */
+    flex-wrap: wrap; /* 반응형을 위해 추가 */
+}
+
+.navLink {
+    color: #4b5563; /* text-gray-600 */
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.2s ease;
+    white-space: nowrap; /* 줄바꿈 방지 */
+}
+
+.navLink:hover {
     color: #111827; /* text-gray-900 */
 }
 
@@ -95,4 +118,44 @@
     margin-right: 0.5rem; /* mr-2 */
     height: 1rem; /* h-4 */
     width: 1rem; /* w-4 */
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .leftSection {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .navigation {
+        width: 100%;
+        justify-content: space-around;
+        margin-top: 0.5rem;
+        gap: 0.5rem;
+    }
+
+    .navLink {
+        padding: 0.25rem 0.5rem;
+    }
+
+    .rightSection {
+        width: 100%;
+        justify-content: flex-end;
+    }
+}
+
+@media (max-width: 480px) {
+    .title {
+        font-size: 1.1rem;
+    }
+
+    .navLink {
+        font-size: 0.875rem;
+    }
 }

@@ -104,7 +104,13 @@ async function apiRequest(req: NextRequest, method: string) {
 
         return await res(backendResponse);
     } catch (e) {
-        return NextResponse.json({ error: e.message || "Proxy error" }, { status: 500 });
+        console.error(e);
+        console.error("Proxy Error");
+        if (e.message.includes("fetch")) {
+            console.log("API_SERVER_UNAVAILABLE");
+            throw new Error("API_SERVER_UNAVAILABLE");
+        }
+        return NextResponse.json( { error: e.message || "Route Error", status: 500 });
     }
 }
 

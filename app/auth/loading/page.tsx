@@ -1,3 +1,7 @@
+/*
+* 구글 로그인 로딩 화면
+* 구글 로그인 프로세스로 바로 라우트
+* */
 "use client";
 
 import { useEffect } from "react";

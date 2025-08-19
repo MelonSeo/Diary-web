@@ -1,4 +1,3 @@
-
 interface routeRequestInit {
     method: string;
     endpoint: string;
