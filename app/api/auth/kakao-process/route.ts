@@ -72,6 +72,7 @@ export async function POST(request: NextRequest) {
         // 3. 우리 Spring Boot 백엔드 서버로 사용자 정보 전송
         // 백엔드는 이 정보를 바탕으로 로그인/회원가입 처리 및 우리 서비스의 JWT 발급
         console.log("Sending user info to backend for login...")
+        console.log(`${apiBaseUrl}/auth/login`);
         const backendLoginResponse = await fetch(`${apiBaseUrl}/auth/login`, {
             method: "POST",
             headers: {

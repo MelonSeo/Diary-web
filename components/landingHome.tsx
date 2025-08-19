@@ -18,7 +18,7 @@ export default function LandingHome() {
                         언제든 다시 꺼내볼 수 있도록 돕는 개인 일기장입니다.
                     </p>
                     <div className={styles.ctaButtons}>
-                        <Link href="/diary/new" className={styles.primaryButton}>
+                        <Link href="/my-diaries/new" className={styles.primaryButton}>
                             <Plus className={styles.buttonIcon} />새 일기 작성
                         </Link>
                         <Link href="/my-diaries" className={styles.secondaryButton}>

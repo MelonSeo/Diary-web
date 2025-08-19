@@ -5,6 +5,8 @@ import {router} from "next/client";
 
 const isProd = process.env.NODE_ENV === "production";
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+const apiBaseUrl = process.env.API_BASE_URL || process.env.NEXT_PUBLIC_API_BASE_URL
+
 
 export async function GET(req: NextRequest) {
     console.log("google process");
@@ -36,7 +38,8 @@ export async function GET(req: NextRequest) {
     const username = verifiedProfile.name.toString();
 
 try {
-    const backendRes = await fetch(process.env.NEXT_PUBLIC_API_BASE_URL!, {
+    console.log(`${apiBaseUrl}/auth/login`);
+    const backendRes = await fetch(`${apiBaseUrl}/auth/login`!, {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({
@@ -44,10 +47,11 @@ try {
         }),
     });
     if (!backendRes.ok) {
-        console.log(backendRes.statusText);
-        console.log(backendRes.body);
-        console.log(req.nextUrl.origin);
-        return NextResponse.redirect(new URL("/error", req.nextUrl.origin));
+        const errorData = await backendRes.json();
+        console.error("Backend login failed:", backendRes.status, errorData)
+        const url = new URL("/login", req.nextUrl.origin);
+        url.searchParams.set("error", "Backend authentication failed.");
+        return NextResponse.redirect(url);
     }
 
 

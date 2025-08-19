@@ -30,6 +30,7 @@ export default function UserProfileForm() {
     useEffect(() => {
         const fetchUserProfile = async () => {
             try {
+                console.log("Fetching user profile");
                 const response = await getUserProfile()
                 setUser(response)
                 setUsername(response.username)

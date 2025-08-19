@@ -2,6 +2,7 @@ import {del, get, patch, post, put} from "@/lib/api";
 import {DiaryEntry, PaginatedResponse, UpdateUserProfile, UserProfile} from "@/types/diary";
 
 export function getUserProfile() :Promise<UserProfile> {
+    console.log("getUserProfile");
     return get("/users/me");
 }
 

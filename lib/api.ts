@@ -1,17 +1,26 @@
 interface routeRequestInit {
-    method: string;
+    requestMethod: string;
     endpoint: string;
     body?: any;
     headers?: HeadersInit;
 }
 
-async function request<T> ({ method, endpoint, body, headers}: routeRequestInit): Promise<T> {
+async function request<T> ({ requestMethod, endpoint, body, headers}: routeRequestInit): Promise<T> {
     const url = "/api/bff"
+    console.log(`${requestMethod} ${endpoint} ${body}`);
     const res = await fetch(url, {
-        method,
+        method: "POST",
         credentials: "include",
         headers,
-        body: body || JSON.stringify({endpoint}),
+        body: JSON.stringify({
+            endpoint,
+            requestMethod,
+            ...(requestMethod === "POST" ||
+            requestMethod === "PUT" ||
+            requestMethod === "PATCH"
+                ? { data: body }
+                : {}),
+        }),
     });
 
     if (!res.ok) {
@@ -31,9 +40,10 @@ function jsonHeaders(options?: HeadersInit): HeadersInit {
 }
 
 export function get<T>(endpoint: string, headers?: HeadersInit) :Promise<T> {
+    console.log("endpoint:", endpoint);
     return request<T>({
         endpoint,
-        method: "GET",
+        requestMethod: "GET",
         headers: jsonHeaders(headers),
     });
 }
@@ -41,40 +51,36 @@ export function get<T>(endpoint: string, headers?: HeadersInit) :Promise<T> {
 export function del<T>(endpoint: string, headers?: HeadersInit) {
     return request<T>({
         endpoint,
-        method: "DELETE",
+        requestMethod: "DELETE",
         headers: jsonHeaders(headers),
     });
 }
 
 export function post<T>(endpoint: string, body?: any, headers?: HeadersInit) {
-    const isForm = body instanceof FormData;
-
     return request<T>({
         endpoint,
-        method: "POST",
-        headers: isForm ? headers : jsonHeaders(headers),
-        body: isForm ? body : JSON.stringify({ endpoint, data: body}),
+        requestMethod: "POST",
+        headers: jsonHeaders(headers),
+        body,
     });
 }
 
 export function patch<T>(endpoint: string, body?: any, headers?: HeadersInit) {
-    const isForm = body instanceof FormData;
 
     return request<T>({
         endpoint,
-        method: "PATCH",
-        headers: isForm ? headers : jsonHeaders(headers),
-        body: isForm ? body : JSON.stringify({ endpoint, data: body}),
+        requestMethod: "PATCH",
+        headers: jsonHeaders(headers),
+        body,
     });
 }
 
 export function put<T>(endpoint: string, body?: any, headers?: HeadersInit) {
-    const isForm = body instanceof FormData;
 
     return request<T>({
         endpoint,
-        method: "PUT",
-        headers: isForm ? headers : jsonHeaders(headers),
-        body: isForm ? body : JSON.stringify({ endpoint, data: body}),
+        requestMethod: "PUT",
+        headers: jsonHeaders(headers),
+        body,
     });
 }

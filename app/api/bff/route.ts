@@ -3,34 +3,52 @@ import { cookies } from "next/headers";
 
 const API_BASE = process.env.API_BASE_URL || process.env.NEXT_PUBLIC_API_BASE_URL;
 
-export async function GET(req: NextRequest) {
+/*export async function GET(req: NextRequest) {
     return apiRequest(req, "GET");
 }
 export async function DELETE(req: NextRequest) {
     return apiRequest(req, "DELETE");
 }
-export async function POST(req: NextRequest) {
-    return apiRequest(req, "POST");
-}
+
 export async function PUT(req: NextRequest) {
     return apiRequest(req, "PUT");
 }
 export async function PATCH(req: NextRequest) {
     return apiRequest(req, "PATCH");
+}*/
+export async function POST(req: NextRequest) {
+    return apiRequest(req);
+}
+interface apiBody {
+    endpoint : string;
+    requestMethod: string;
+    data?: any;
 }
 
-async function apiRequest(req: NextRequest, method: string) {
+async function apiRequest(req: NextRequest) {
     if (!API_BASE) return NextResponse.json({ error: "API_BASE 설정 누락" }, { status: 500 });
+
+    let body: apiBody | null = null;
+    try {
+        body = await req.json();
+    } catch {
+        return NextResponse.json({error: "잘못된 요청 body", status: 400});
+    }
 
     try {
         const cookieStore = await cookies();
         const accessToken = cookieStore.get("accessToken").value;
         const refreshToken = cookieStore.get("refreshToken").value;
 
-        const {endpoint, data} = await req.json();
+        const endpoint = body?.endpoint;
+        const method = body?.requestMethod;
+        const data = body?.data;
+
         if (!endpoint) {
             return NextResponse.json({error: "endpoint 누락"}, {status: 400});
         }
+        console.log("endpoint:", endpoint);
+        console.log("data:", data);
 
         // @description logout 요청 시 백엔드 로그아웃 호출 후 여부 관계없이 쿠키 삭제
         if (endpoint === "/auth/logout") {
@@ -62,9 +80,10 @@ async function apiRequest(req: NextRequest, method: string) {
             method,
             headers: {
                 ...(accessToken ? {Authorization: `Bearer ${accessToken}`} : {}),
-                ...(data ? {"Content-Type": "application/json"} : {})
+                // JSON 전송은 POST/PUT/PATCH일 때만
+                ...(["POST", "PUT", "PATCH"].includes(method) ? { "Content-Type": "application/json" } : {}),
             },
-            body: data ? JSON.stringify(data) : undefined,
+            body: ["POST", "PUT", "PATCH"].includes(method) && data !== undefined ? JSON.stringify(data) : undefined,
         };
 
         let backendResponse = await fetch(`${API_BASE}${endpoint}`, config);
@@ -95,8 +114,8 @@ async function apiRequest(req: NextRequest, method: string) {
 
             backendResponse = await fetch(`${API_BASE}${endpoint}`, { ...config,
             headers: {
-            ...(newAccess ? {Authorization: `Bearer ${newAccess}`} : {}),
-            ...(data ? {"Content-Type": "application/json"} : {}),
+                ...config.headers,
+                Authorization: `Bearer ${newAccess}`,
             },
             });
             return await resWithCookies(backendResponse, cookieCarrier);
