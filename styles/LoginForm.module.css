@@ -48,6 +48,7 @@
     display: flex;
     flex-direction: column;
     gap: 1rem; /* space-y-4 */
+    align-items: center;
 }
 
 /* 에러 메시지 스타일 */
@@ -82,33 +83,35 @@
     text-decoration: none;
 }
 
-.loginButton:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+.loginButton img {
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.loginButton:hover img {
+    transform: scale(1.02);
+    filter: contrast(1.1);
 }
 
 /* 카카오 로그인 버튼 */
 .kakaoButton {
-    background-color: #fee500; /* bg-yellow-400 */
+    background-color: transparent;
     color: #000000; /* text-black */
-    border: 1px solid #fee500;
+    border: none;
 }
 
 .kakaoButton:hover:not(:disabled) {
-    background-color: #fde047; /* hover:bg-yellow-500 */
-    border-color: #fde047;
+    /* No background or border changes for transparent button */
 }
 
 /* 구글 로그인 버튼 */
 .googleButton {
     background-color: transparent; /* bg-transparent */
     color: #374151;
-    border: 1px solid #d1d5db; /* border */
+    border: none;
 }
 
 .googleButton:hover:not(:disabled) {
-    background-color: #f9fafb; /* hover:bg-gray-50 */
-    border-color: #9ca3af;
+    /* No background or border changes for transparent button */
 }
 
 /* 로딩 상태 */
@@ -151,3 +154,5 @@
         padding: 0 1rem 1rem;
     }
 }
+
+
