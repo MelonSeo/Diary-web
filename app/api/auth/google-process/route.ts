@@ -60,8 +60,10 @@ try {
     const refreshToken = data.refreshToken.toString();
 
     const nextUrl = req.nextUrl.searchParams.get("next") || "/";
+    const callbackUrl = new URL("/auth/callback", req.nextUrl.origin);
+    callbackUrl.searchParams.set("next", nextUrl);
 
-    const res = NextResponse.redirect(new URL(nextUrl, req.nextUrl.origin));
+    const res = NextResponse.redirect(callbackUrl);
     if (accessToken) {
         res.cookies.set("accessToken", accessToken, {
             httpOnly: true,

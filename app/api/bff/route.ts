@@ -47,12 +47,13 @@ async function apiRequest(req: NextRequest) {
         if (!endpoint) {
             return NextResponse.json({error: "endpoint 누락"}, {status: 400});
         }
-        console.log("endpoint:", endpoint);
-        console.log("data:", data);
+        console.log("[bff]endpoint:", endpoint);
+        console.log("[bff]data:", data);
 
         // @description logout 요청 시 백엔드 로그아웃 호출 후 여부 관계없이 쿠키 삭제
         if (endpoint === "/auth/logout") {
             const isProd = process.env.NODE_ENV === "production";
+            console.log("[bff]logout");
 
             // 백엔드 로그아웃 호출 (바디 없음)
             const backendRes = await fetch(`${API_BASE}/auth/logout`, {

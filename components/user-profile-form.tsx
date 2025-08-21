@@ -27,38 +27,50 @@ export default function UserProfileForm() {
     const [isDeleting, startDeleteTransition] = useTransition()
     const [error, setError] = useState<string | null>(null)
 
-    useEffect(() => {
-        const fetchUserProfile = async () => {
-            try {
-                console.log("Fetching user profile");
-                const response = await getUserProfile()
-                setUser(response)
-                setUsername(response.username)
-                setProfileImageUrl(response.profileImageUrl || "")
-            } catch (err) {
-                console.error("Failed to fetch user profile:", err)
-                setError("프로필 정보를 불러오는 데 실패했습니다.")
-                // API 서버 연결 실패 시 목업 데이터 사용
-                if (err instanceof Error) {
-                    const mockUser: UserProfile = {
-                        id: "mock-user-1",
-                        username: "테스트 사용자",
-                        email: "test@example.com",
-                        profileImageUrl: "/placeholder.svg?height=100&width=100&text=Mock User",
-                        provider: "KAKAO",
-                        providerId: "mock-provider-id-1",
-                        //createdAt: new Date().toISOString(),
-                    }
-                    setUser(mockUser)
-                    setUsername(mockUser.username)
-                    setProfileImageUrl(mockUser.profileImageUrl || "")
-                    setError("API 서버에 연결할 수 없습니다. 목업 데이터를 표시합니다.")
+    const fetchUserProfile = async () => {
+        try {
+            console.log("Fetching user profile");
+            const response = await getUserProfile()
+            setUser(response)
+            setUsername(response.username)
+            setProfileImageUrl(response.profileImageUrl || "")
+        } catch (err) {
+            console.error("Failed to fetch user profile:", err)
+            setError("프로필 정보를 불러오는 데 실패했습니다.")
+            // API 서버 연결 실패 시 목업 데이터 사용
+            if (err instanceof Error) {
+                const mockUser: UserProfile = {
+                    id: "mock-user-1",
+                    username: "테스트 사용자",
+                    email: "test@example.com",
+                    profileImageUrl: "/placeholder.svg?height=100&width=100&text=Mock User",
+                    provider: "KAKAO",
+                    providerId: "mock-provider-id-1",
+                    //createdAt: new Date().toISOString(),
                 }
-            } finally {
-                setIsLoading(false)
+                setUser(mockUser)
+                setUsername(mockUser.username)
+                setProfileImageUrl(mockUser.profileImageUrl || "")
+                setError("API 서버에 연결할 수 없습니다. 목업 데이터를 표시합니다.")
             }
+        } finally {
+            setIsLoading(false)
         }
+    }
+
+    useEffect(() => {
         fetchUserProfile()
+
+        const handleProfileUpdate = () => {
+            console.log("[header] Profile updated event received. Refetching user info...");
+            fetchUserProfile();
+        }
+
+        window.addEventListener("profileUpdated", handleProfileUpdate);
+
+        return () => {
+            window.removeEventListener("profileUpdated", handleProfileUpdate);
+        }
     }, [])
 
     const handleUpdateProfile = () => {
@@ -79,6 +91,7 @@ export default function UserProfileForm() {
                 setUsername(response.username)
                 setProfileImageUrl(response.profileImageUrl || "")
                 alert("프로필이 성공적으로 업데이트되었습니다!")
+                window.dispatchEvent(new CustomEvent("profileUpdated")) // 프로필 업데이트 이벤트 발생
             } catch (err) {
                 console.error("Failed to update profile:", err)
                 setError("프로필 업데이트에 실패했습니다. 다시 시도해주세요.")

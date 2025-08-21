@@ -2,16 +2,18 @@ import {del, get, patch, post, put} from "@/lib/api";
 import {DiaryEntry, PaginatedResponse, UpdateUserProfile, UserProfile} from "@/types/diary";
 
 export function getUserProfile() :Promise<UserProfile> {
-    console.log("getUserProfile");
+    console.log("[client-api]getUserProfile");
     return get("/users/me");
 }
 
 export function deleteUser() :Promise<void> {
+    console.log("[client-api]deleteUser");
     return del("/users/me");
 }
 
 export function updateUserProfile(data: {username?: string, profileImageUrl?: string}) :Promise<UpdateUserProfile> {
-    return patch("users/me/profile", data);
+    console.log("[client-api]updateUserProfile");
+    return patch("/users/me/profile", data);
 }
 
 export function logout():Promise<void> {

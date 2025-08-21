@@ -54,9 +54,9 @@ export default function KakaoLoginHandlerPage() {
                         return
                     }
 
-                    // 성공적으로 처리되면 메인 페이지로 리다이렉트
-                    console.log("Kakao login successful, redirecting to home.")
-                    router.replace("/")
+                    // 성공적으로 처리되면 콜백 페이지로 리다이렉트
+                    console.log("Kakao login successful, redirecting to callback page.")
+                    router.replace("/auth/callback")
                 } catch (err) {
                     console.error("Network or unexpected error during Kakao login process:", err)
                     setError("네트워크 오류 또는 예상치 못한 오류가 발생했습니다.")
