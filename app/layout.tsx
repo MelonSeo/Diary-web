@@ -2,9 +2,9 @@ import {Metadata} from "next";
 import "../styles/global.css";
 import Script from "next/script";
 import {Inter} from "next/font/google";
-import HeaderWrapper from "@/components/header-wrapper";
+import HeaderWrapper from "@/components/(home)/header-wrapper";
 import React from "react";
-import AnimatedBackground from "@/components/animated-background";
+import AnimatedBackground from "@/components/(home)/animated-background";
 
 
 

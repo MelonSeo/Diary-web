@@ -1,0 +1,88 @@
+/* styles/DiaryView.module.css */
+.container {
+  max-width: 48rem; /* max-w-3xl */
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+}
+
+.dark .container {
+  background-color: #1f2937; /* dark:bg-gray-800 */
+}
+
+.header {
+  border-bottom: 1px solid #e5e7eb; /* border-gray-200 */
+  padding-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.dark .header {
+  border-color: #374151; /* dark:border-gray-700 */
+}
+
+.title {
+  font-size: 2.25rem; /* text-4xl */
+  font-weight: 800; /* font-extrabold */
+  line-height: 1.2;
+}
+
+.meta {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #6b7280; /* text-gray-500 */
+  font-size: 0.875rem;
+}
+
+.dark .meta {
+  color: #9ca3af; /* dark:text-gray-400 */
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.content {
+  margin-top: 2rem;
+  line-height: 1.75;
+  white-space: pre-wrap; /* Preserves line breaks */
+  font-size: 1.125rem; /* text-lg */
+}
+
+.imageGallery {
+  margin-top: 2.5rem;
+}
+
+.galleryTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 0.5rem;
+}
+
+.dark .galleryTitle {
+  border-color: #374151;
+}
+
+.imageList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 1rem;
+}
+
+.imageWrapper {
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.image {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}

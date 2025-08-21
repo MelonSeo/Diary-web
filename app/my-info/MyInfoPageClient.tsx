@@ -1,6 +1,6 @@
 "use client" // 이 파일은 클라이언트 컴포넌트임을 명시
 
-import UserProfileForm from "@/components/user-profile-form" // 새로 생성할 컴포넌트 임포트
+import UserProfileForm from "@/components/(user)/user-profile-form" // 새로 생성할 컴포넌트 임포트
 
 /**
  * @file app/my-info/page.tsx

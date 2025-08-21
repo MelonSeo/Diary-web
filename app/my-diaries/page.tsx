@@ -1,4 +1,4 @@
-import DiaryList from "@/components/diary-list" // 일기 목록 클라이언트 컴포넌트
+import DiaryList from "@/components/(diary)/diary-list" // 일기 목록 클라이언트 컴포넌트
 import { getClientDiaries } from "@/lib/client-api" // 타입 안전한 API 클라이언트
 import type { Metadata } from "next" // Next.js 메타데이터 타입
 import styles from "@/styles/DiaryDashboard.module.css" // CSS Modules 임포트 (기존 대시보드 스타일 재활용)

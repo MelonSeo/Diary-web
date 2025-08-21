@@ -1,7 +1,7 @@
 "use client" // 이 파일은 클라이언트 컴포넌트임을 명시
 
 import { usePathname } from "next/navigation" // 현재 경로를 가져오는 훅
-import Header from "@/components/header" // 기존 헤더 컴포넌트 임포트
+import Header from "@/components/(home)/header" // 기존 헤더 컴포넌트 임포트
 
 /**
  * @file components/app-header-wrapper.tsx

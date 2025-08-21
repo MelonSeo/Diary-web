@@ -1,4 +1,4 @@
-import NewDiaryForm from "@/components/new-diary-form";
+import NewDiaryForm from "@/components/(diary)/new-diary-form";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
