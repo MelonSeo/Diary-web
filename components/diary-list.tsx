@@ -35,7 +35,7 @@ export default function DiaryList({ diariesData, currentPage }: DiaryListProps) 
                     <Card key={diary.id} className={styles.diaryCard}>
                         <CardHeader>
                             <CardTitle className={styles.diaryTitle}>
-                                <Link href={`/diary/${diary.id}`}>{diary.title}</Link>
+                                <Link href={`/my-diaries/${diary.id}`}>{diary.title}</Link>
                             </CardTitle>
                             <div className={styles.diaryMeta}>
                                 <Calendar className="w-4 h-4" />

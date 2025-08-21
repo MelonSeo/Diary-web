@@ -88,8 +88,8 @@ export default function UserProfileForm() {
 
             try {
                 const response = await updateUserProfile(updateData)
-                setUsername(response.username)
-                setProfileImageUrl(response.profileImageUrl || "")
+                /*setUsername(response.username)
+                setProfileImageUrl(response.profileImageUrl || "")*/
                 alert("프로필이 성공적으로 업데이트되었습니다!")
                 window.dispatchEvent(new CustomEvent("profileUpdated")) // 프로필 업데이트 이벤트 발생
             } catch (err) {

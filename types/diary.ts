@@ -38,7 +38,11 @@ export interface DiaryImage {
 export interface CreateDiaryRequest {
     title: string // 새 일기 제목
     content: string // 새 일기 내용
-    images?: File[] // 첨부할 이미지 파일 배열 (선택적)
+    //images?: File[] // 첨부할 이미지 파일 배열 (선택적)
+}
+
+export interface CreateDiaryResponse {
+    id: string
 }
 
 

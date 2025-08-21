@@ -1,0 +1,77 @@
+/* styles/ImageUploader.module.css */
+.dropzone {
+  border: 2px dashed #d1d5db; /* border-gray-300 */
+  border-radius: 0.75rem; /* rounded-xl */
+  padding: 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+  background-color: #f9fafb; /* bg-gray-50 */
+}
+
+.dark .dropzone {
+  border-color: #4b5563; /* dark:border-gray-600 */
+  background-color: #1f2937; /* dark:bg-gray-800 */
+}
+
+.dropzone:hover {
+  border-color: #9ca3af; /* border-gray-400 */
+  background-color: #f3f4f6; /* bg-gray-100 */
+}
+
+.dark .dropzone:hover {
+  border-color: #6b7280; /* dark:border-gray-500 */
+  background-color: #374151; /* dark:bg-gray-700 */
+}
+
+.dropzone p {
+  color: #6b7280; /* text-gray-500 */
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+.dark .dropzone p {
+  color: #9ca3af; /* dark:text-gray-400 */
+}
+
+.previewContainer {
+  margin-top: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 1rem;
+}
+
+.previewItem {
+  position: relative;
+  overflow: hidden;
+  border-radius: 0.5rem; /* rounded-lg */
+}
+
+.previewImage {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+}
+
+.removeButton {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.25rem;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  border: none;
+  border-radius: 9999px; /* rounded-full */
+  cursor: pointer;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  opacity: 0.8;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.removeButton:hover {
+  opacity: 1;
+}

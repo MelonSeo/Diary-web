@@ -1,5 +1,5 @@
 import {del, get, patch, post, put} from "@/lib/api";
-import {DiaryEntry, PaginatedResponse, UpdateUserProfile, UserProfile} from "@/types/diary";
+import {CreateDiaryResponse, DiaryEntry, PaginatedResponse, UpdateUserProfile, UserProfile} from "@/types/diary";
 
 export function getUserProfile() :Promise<UserProfile> {
     console.log("[client-api]getUserProfile");
@@ -28,7 +28,7 @@ export function getDiary(id: string): Promise<DiaryEntry> {
     return get(`/diaries/${id}`)
 }
 
-export function createDiary(data: { title: string; content: string;}): Promise<void> {
+export function createDiary(data: { title: string; content: string;}): Promise<CreateDiaryResponse> {
     return post("/diaries", data)
 }
 
