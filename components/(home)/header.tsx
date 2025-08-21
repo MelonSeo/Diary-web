@@ -87,7 +87,7 @@ export default function Header() {
             <div className={styles.container}>
                 <div className={styles.leftSection}>
                     <h1 className={styles.title}>
-                        <Link href="/">나의 일기장</Link> {/* 홈으로 이동하는 링크 */}
+                        <Link href="/">일기장</Link> {/* 홈으로 이동하는 링크 */}
                     </h1>
                     {/* 새로운 내비게이션 링크들 */}
                     <nav className={styles.navigation}>
