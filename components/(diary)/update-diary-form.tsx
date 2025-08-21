@@ -56,9 +56,9 @@ export default function UpdateDiaryForm({ initialDiary }: UpdateDiaryFormProps) 
         }
 
         try {
-            await updateDiary(initialDiary.id, { title, content });
+            const updated =await updateDiary(initialDiary.id, { title, content });
             alert("일기가 성공적으로 수정되었습니다.");
-            router.push(`/my-diaries/${initialDiary.id}`);
+            router.push(`/my-diaries/${updated.id}`);
             router.refresh();
         } catch (err) {
             setError("일기 수정에 실패했습니다. 다시 시도해주세요.");

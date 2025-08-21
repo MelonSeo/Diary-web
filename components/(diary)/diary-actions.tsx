@@ -2,17 +2,14 @@
 
 import { deleteDiary } from "@/lib/client-api";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
 import { Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
+import styles from "@/styles/DiaryActions.module.css"; // Import the new CSS module
 
 interface DiaryActionsProps {
   diaryId: string;
 }
 
-/*
-* 일기 삭제 및 수정 액션
-* */
 export default function DiaryActions({ diaryId }: DiaryActionsProps) {
   const router = useRouter();
 
@@ -31,17 +28,15 @@ export default function DiaryActions({ diaryId }: DiaryActionsProps) {
   };
 
   return (
-    <div className="flex gap-2">
-      <Button variant="outline" asChild>
-        <Link href={`/my-diaries/${diaryId}/update`}>
-          <Pencil className="mr-2 h-4 w-4" />
-          수정
-        </Link>
-      </Button>
-      <Button variant="destructive" onClick={handleDelete}>
-        <Trash2 className="mr-2 h-4 w-4" />
+    <div className={styles.actionsContainer}>
+      <Link href={`/my-diaries/${diaryId}/update`} className={styles.editButton}>
+        <Pencil className={styles.buttonIcon} />
+        수정
+      </Link>
+      <button type="button" onClick={handleDelete} className={styles.deleteButton}>
+        <Trash2 className={styles.buttonIcon} />
         삭제
-      </Button>
+      </button>
     </div>
   );
 }

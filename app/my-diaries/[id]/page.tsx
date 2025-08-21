@@ -27,6 +27,7 @@ export default async function DiaryPage({ params }: PageProps) {
     const { id } = params;
     
     try {
+        console.log("DiaryPage id:", id);
         const diary = await getDiary(id);
         return <DiaryView diary={diary} />;
     } catch (error) {

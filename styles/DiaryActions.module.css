@@ -1,0 +1,52 @@
+/* styles/DiaryActions.module.css */
+.actionsContainer {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.editButton {
+  /* Tailwind equivalent: variant="outline" */
+  background-color: transparent;
+  border: 1px solid #d1d5db; /* border-gray-300 */
+  color: #374151; /* text-gray-700 */
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  font-weight: 500;
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.dark .editButton {
+  border-color: #4b5563; /* dark:border-gray-600 */
+  color: #d1d5db; /* dark:text-gray-300 */
+}
+
+.editButton:hover {
+  background-color: #f3f4f6; /* hover:bg-gray-100 */
+  border-color: #9ca3af; /* hover:border-gray-400 */
+}
+
+.dark .editButton:hover {
+  background-color: #374151; /* dark:hover:bg-gray-700 */
+  border-color: #6b7280; /* dark:hover:border-gray-500 */
+}
+
+.deleteButton {
+  /* Tailwind equivalent: variant="destructive" */
+  background-color: #dc2626; /* bg-red-600 */
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  font-weight: 500;
+  border: none;
+  transition: background-color 0.2s;
+}
+
+.deleteButton:hover {
+  background-color: #b91c1c; /* hover:bg-red-700 */
+}
+
+.buttonIcon {
+  width: 1rem; /* w-4 */
+  height: 1rem; /* h-4 */
+  margin-right: 0.5rem;
+}

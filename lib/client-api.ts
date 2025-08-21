@@ -25,6 +25,7 @@ export function getClientDiaries(page = 1, limit = 12): Promise<PaginatedRespons
 }
 
 export function getDiary(id: string): Promise<DiaryEntry> {
+    console.log("[client-api]getDiary");
     return get(`/diaries/${id}`)
 }
 
@@ -32,10 +33,7 @@ export function createDiary(data: { title: string; content: string;}): Promise<C
     return post("/diaries", data)
 }
 
-export function updateDiary(
-    id: string,
-    data: { title?: string; content?: string; },
-): Promise<DiaryEntry> {
+export function updateDiary(id: string, data: { title?: string; content?: string; },): Promise<CreateDiaryResponse> {
     return put(`/diaries/${id}`, data)
 }
 

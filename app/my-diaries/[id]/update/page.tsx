@@ -42,7 +42,6 @@ export default async function UpdateDiaryPage({ params }: PageProps) {
             ],
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
-            author: { id: "1", name: "개발자", email: "dev@example.com" },
         };
     }
 
