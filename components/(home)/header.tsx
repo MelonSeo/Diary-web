@@ -129,12 +129,12 @@ export default function Header() {
                                     </div>
                                 </div>
                                 {/* 내 정보 페이지로 이동 */}
-                                <DropdownMenuItem onClick={() => (window.location.href = "/my-info")}>
+                                <DropdownMenuItem className={styles.dropdownMenuItem} onClick={() => (window.location.href = "/my-info")}>
                                     <User className={styles.logoutIcon} />
                                     <span>내 정보</span>
                                 </DropdownMenuItem>
                                 {/* 로그아웃 버튼 */}
-                                <DropdownMenuItem onClick={handleLogout}>
+                                <DropdownMenuItem className={styles.dropdownMenuItem} onClick={handleLogout}>
                                     <LogOut className={styles.logoutIcon} />
                                     <span>로그아웃</span>
                                 </DropdownMenuItem>

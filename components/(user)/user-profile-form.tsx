@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import type { UserProfile, UpdateUserProfile } from "@/types/diary"
 import styles from "@/styles/UserProfileForm.module.css"
 import {deleteUser, getUserProfile, logout, updateUserProfile} from "@/lib/client-api"; // CSS Modules 임포트
@@ -121,7 +122,7 @@ export default function UserProfileForm() {
     if (isLoading) {
         return (
             <div className={styles.container}>
-                <div className="text-center">
+                <div className={styles.loadingContainer}>
                     <div className={styles.loadingSpinner}></div>
                     <p className={styles.loadingText}>프로필 정보를 불러오는 중...</p>
                 </div>
@@ -137,8 +138,8 @@ export default function UserProfileForm() {
                         <CardTitle>프로필 정보를 찾을 수 없습니다</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <p className="text-gray-600">로그인 상태를 확인하거나 다시 시도해주세요.</p>
-                        <Button onClick={() => router.push("/login")} className="mt-4">
+                        <p className={styles.infoText}>로그인 상태를 확인하거나 다시 시도해주세요.</p>
+                        <Button onClick={() => router.push("/login")} className={styles.loginButton}>
                             로그인 페이지로 이동
                         </Button>
                     </CardContent>
@@ -152,7 +153,7 @@ export default function UserProfileForm() {
             <div className={styles.mainContent}>
                 <div className={styles.headerSection}>
                     <Button variant="ghost" onClick={() => router.back()} className={styles.backButton}>
-                        <ArrowLeft className="w-4 h-4" />
+                        <ArrowLeft className={styles.iconSmall} />
                         뒤로가기
                     </Button>
                     <h1 className={styles.title}>내 정보</h1>
@@ -171,19 +172,20 @@ export default function UserProfileForm() {
                     <CardContent className={styles.cardContent}>
                         <div className={styles.profileInfo}>
                             <div className={styles.profileImageWrapper}>
-                                <img
-                                    src={profileImageUrl || "/placeholder.svg?height=100&width=100&text=Mock User"}
-                                    alt="프로필 이미지"
-                                    className={styles.profileImage}
-                                />
+                                <Avatar className={styles.profileImage}>
+                                    <AvatarImage src={profileImageUrl} alt="프로필 이미지" />
+                                    <AvatarFallback>
+                                        <User className={styles.avatarFallbackIcon} />
+                                    </AvatarFallback>
+                                </Avatar>
                             </div>
                             <div className={styles.profileDetails}>
                                 <p className={styles.usernameText}>
-                                    <User className="w-4 h-4" />
+                                    <User className={styles.iconSmall} />
                                     {user?.username}
                                 </p>
                                 <p className={styles.emailText}>
-                                    <Mail className="w-4 h-4" />
+                                    <Mail className={styles.iconSmall} />
                                     {user?.email}
                                 </p>
                                 {/*<p className={styles.createdAtText}>

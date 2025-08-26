@@ -65,9 +65,15 @@
 
 .avatarButton {
     position: relative;
-    height: 2rem; /* h-8 */
-    width: 2rem; /* w-8 */
+    height: 2.5rem; /* h-10 */
+    width: 2.5rem; /* w-10 */
     border-radius: 9999px; /* rounded-full */
+    background-color: #f3f4f6; /* bg-gray-100 */
+    transition: background-color 0.2s ease;
+}
+
+.avatarButton:hover {
+    background-color: #e5e7eb; /* hover:bg-gray-200 */
 }
 
 .avatar {
@@ -116,6 +122,15 @@
     margin-right: 0.5rem; /* mr-2 */
     height: 1rem; /* h-4 */
     width: 1rem; /* w-4 */
+}
+
+.dropdownMenuItem {
+    /* 기존 shadcn/ui 스타일과 충돌을 피하기 위해, 필요하다면 !important를 사용할 수 있지만 우선순위를 높이는 것으로 해결 시도 */
+}
+
+.dropdownMenuItem:hover {
+    background-color: #f3f4f6 !important; /* hover:bg-gray-100, !important를 사용하여 다른 스타일을 덮어쓰기 */
+    cursor: pointer !important;
 }
 
 /* 반응형 디자인 */

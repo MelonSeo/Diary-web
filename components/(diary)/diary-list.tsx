@@ -32,32 +32,38 @@ export default function DiaryList({ diariesData, currentPage }: DiaryListProps) 
         <>
             <div className={styles.grid}>
                 {diaries.map((diary) => (
-                    <Card key={diary.id} className={styles.diaryCard}>
-                        <CardHeader>
-                            <CardTitle className={styles.diaryTitle}>
-                                <Link href={`/my-diaries/${diary.id}`}>{diary.title}</Link>
-                            </CardTitle>
-                            <div className={styles.diaryMeta}>
-                                <Calendar className="w-4 h-4" />
-                                <span>{new Date(diary.createdAt).toLocaleDateString("ko-KR")}</span>
-                            </div>
-                        </CardHeader>
-                        <CardContent>
-                            <p className={styles.diaryContent}>
-                                {diary.content.length > 100 ? `${diary.content.substring(0, 100)}...` : diary.content}
-                            </p>
-                            {diary.images.length > 0 && (
-                                <div className={styles.imagePreview}>
-                                    <img
-                                        src={diary.images[0].url || "/placeholder.svg"}
-                                        alt="일기 이미지"
-                                        className={styles.previewImage}
-                                    />
-                                    {diary.images.length > 1 && <span className={styles.imageCount}>+{diary.images.length - 1}</span>}
+                    <Link href={`/my-diaries/${diary.id}`} key={diary.id} className={styles.diaryLink}>
+                        <Card className={styles.diaryCard}>
+                            <CardHeader>
+                                <CardTitle className={styles.diaryTitle}>{diary.title}</CardTitle>
+                                <div className={styles.diaryMeta}>
+                                    <Calendar className="w-4 h-4" />
+                                    <span>{new Date(diary.createdAt).toLocaleDateString("ko-KR")}</span>
                                 </div>
-                            )}
-                        </CardContent>
-                    </Card>
+                            </CardHeader>
+                            <CardContent>
+                                <p className={styles.diaryContent}>
+                                    {diary.content.length > 100 ? `${diary.content.substring(0, 100)}...` : diary.content}
+                                </p>
+                                <div className={styles.imagePreview}>
+                                    {diary.images.length > 0 ? (
+                                        <>
+                                            <img
+                                                src={diary.images[0].url || "/placeholder.svg"}
+                                                alt="일기 이미지"
+                                                className={styles.previewImage}
+                                            />
+                                            {diary.images.length > 1 && <span className={styles.imageCount}>+{diary.images.length - 1}</span>}
+                                        </>
+                                    ) : (
+                                        <div className={styles.noImageContainer}>
+                                            <span className={styles.noImageText}>No Image</span>
+                                        </div>
+                                    )}
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </Link>
                 ))}
             </div>
 
