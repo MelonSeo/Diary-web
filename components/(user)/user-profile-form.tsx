@@ -10,7 +10,8 @@ import { Label } from "@/components/ui/label"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import type { UserProfile, UpdateUserProfile } from "@/types/diary"
 import styles from "@/styles/UserProfileForm.module.css"
-import {deleteUser, getUserProfile, logout, updateUserProfile} from "@/lib/client-api"; // CSS Modules 임포트
+import {deleteUser, getUserProfile, logout, updateUserProfile} from "@/lib/client-api";
+import Long from "long"; // CSS Modules 임포트
 
 /**
  * @file components/user-profile-form.tsx
@@ -41,7 +42,7 @@ export default function UserProfileForm() {
             // API 서버 연결 실패 시 목업 데이터 사용
             if (err instanceof Error) {
                 const mockUser: UserProfile = {
-                    id: "mock-user-1",
+                    id: Long.fromNumber(1),
                     username: "테스트 사용자",
                     email: "test@example.com",
                     profileImageUrl: "/placeholder.svg?height=100&width=100&text=Mock User",

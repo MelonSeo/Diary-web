@@ -8,7 +8,8 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar" // shadcn/ui 아바타
 import styles from "@/styles/Header.module.css" // Import the CSS Module
 import type { UserProfile } from "@/types/diary"
-import {getUserProfile, logout} from "@/lib/client-api"; // UserProfile 타입 임포트
+import {getUserProfile, logout} from "@/lib/client-api";
+import Long from "long"; // UserProfile 타입 임포트
 
 /**
  * @file components/header.tsx
@@ -36,7 +37,7 @@ export default function Header() {
             // API 서버가 연결되지 않았을 때 목업 데이터 사용
             if (error instanceof Error) {
                 setUser({
-                    id: "mock-user-1",
+                    id: Long.fromNumber(1),
                     username: "테스트 사용자", // 'name' 대신 'username' 사용
                     email: "test@example.com",
                     profileImageUrl: "/placeholder.svg?height=32&width=32&text=User", // 'profileImage' 대신 'profileImageUrl' 사용
@@ -99,6 +100,9 @@ export default function Header() {
                         </Link>
                         <Link href="/my-info" className={styles.navLink}>
                             내 정보
+                        </Link>
+                        <Link href="/calendar" className={styles.navLink}>
+                            캘린더
                         </Link>
                         <Link href="/about-us" className={styles.navLink}>
                             About Us

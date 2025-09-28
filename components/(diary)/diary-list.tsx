@@ -12,7 +12,7 @@ interface DiaryListProps {
 }
 
 export default function DiaryList({ diariesData, currentPage }: DiaryListProps) {
-    const { data: diaries, pagination } = diariesData
+    const { content: diaries, size, hasNext } = diariesData
 
     if (diaries.length === 0) {
         return (
@@ -21,7 +21,7 @@ export default function DiaryList({ diariesData, currentPage }: DiaryListProps) 
                     <h3 className={styles.emptyTitle}>아직 작성된 일기가 없습니다</h3>
                     <p className={styles.emptyDescription}>첫 번째 일기를 작성해보세요!</p>
                     <Button asChild>
-                        <Link href="/diary/new">일기 작성하기</Link>
+                        <Link href="/my-diaries/new">일기 작성하기</Link>
                     </Button>
                 </CardContent>
             </Card>
@@ -32,13 +32,13 @@ export default function DiaryList({ diariesData, currentPage }: DiaryListProps) 
         <>
             <div className={styles.grid}>
                 {diaries.map((diary) => (
-                    <Link href={`/my-diaries/${diary.id}`} key={diary.id} className={styles.diaryLink}>
+                    <Link href={`/my-diaries/${diary.id}`} key={diary.id as React.Key} className={styles.diaryLink}>
                         <Card className={styles.diaryCard}>
                             <CardHeader>
                                 <CardTitle className={styles.diaryTitle}>{diary.title}</CardTitle>
                                 <div className={styles.diaryMeta}>
                                     <Calendar className="w-4 h-4" />
-                                    <span>{new Date(diary.createdAt).toLocaleDateString("ko-KR")}</span>
+                                    <span>{new Date(diary.diaryDate).toLocaleDateString("ko-KR")}</span>
                                 </div>
                             </CardHeader>
                             <CardContent>
@@ -68,45 +68,43 @@ export default function DiaryList({ diariesData, currentPage }: DiaryListProps) 
             </div>
 
             {/* 페이지네이션 */}
-            {pagination.totalPages > 1 && (
-                <div className={styles.pagination}>
-                    <Button variant="outline" disabled={currentPage <= 1} asChild={currentPage > 1}>
-                        {currentPage > 1 ? (
-                            <Link href={`/my-diaries?page=${currentPage - 1}`}>
-                                <ChevronLeft className="w-4 h-4" />
-                                이전
-                            </Link>
-                        ) : (
-                            <>
-                                <ChevronLeft className="w-4 h-4" />
-                                이전
-                            </>
-                        )}
-                    </Button>
+            <div className={styles.pagination}>
+                <Button variant="outline" disabled={currentPage <= 0} asChild={currentPage > 0}>
+                    {currentPage > 0 ? (
+                        <Link href={`/my-diaries?page=${currentPage - 1}`}>
+                            <ChevronLeft className="w-4 h-4" />
+                            이전
+                        </Link>
+                    ) : (
+                        <>
+                            <ChevronLeft className="w-4 h-4" />
+                            이전
+                        </>
+                    )}
+                </Button>
 
-                    <span className={styles.pageInfo}>
-            {currentPage} / {pagination.totalPages}
+                <span className={styles.pageInfo}>
+            {currentPage + 1}
           </span>
 
-                    <Button
-                        variant="outline"
-                        disabled={currentPage >= pagination.totalPages}
-                        asChild={currentPage < pagination.totalPages}
-                    >
-                        {currentPage < pagination.totalPages ? (
-                            <Link href={`/my-diaries?page=${currentPage + 1}`}>
-                                다음
-                                <ChevronRight className="w-4 h-4" />
-                            </Link>
-                        ) : (
-                            <>
-                                다음
-                                <ChevronRight className="w-4 h-4" />
-                            </>
-                        )}
-                    </Button>
-                </div>
-            )}
+                <Button
+                    variant="outline"
+                    disabled={!hasNext}
+                    asChild={hasNext}
+                >
+                    {hasNext ? (
+                        <Link href={`/my-diaries?page=${currentPage + 1}`}>
+                            다음
+                            <ChevronRight className="w-4 h-4" />
+                        </Link>
+                    ) : (
+                        <>
+                            다음
+                            <ChevronRight className="w-4 h-4" />
+                        </>
+                    )}
+                </Button>
+            </div>
         </>
     )
 }

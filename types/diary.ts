@@ -4,18 +4,21 @@
  *              데이터 구조의 일관성과 타입 안전성을 보장합니다.
  */
 
+import Long from "long";
+
 /**
  * @interface DiaryEntry
  * @description 단일 일기 항목의 데이터 구조를 정의합니다.
  */
 export interface DiaryEntry {
-    id: string // 일기 고유 ID
+    id: Long | string // 일기 고유 ID
     title: string // 일기 제목
     content: string // 일기 내용
     images: DiaryImage[] // 일기에 첨부된 이미지 배열
+    diaryDate: string // 일기 날짜 (YYYY-MM-DD 형식 문자열)
     createdAt: string // 일기 생성 날짜 (ISO 8601 형식 문자열)
     updatedAt: string // 일기 마지막 업데이트 날짜 (ISO 8601 형식 문자열)
-    uid?: string
+    uid?: Long | string
 }
 
 /**
@@ -23,7 +26,7 @@ export interface DiaryEntry {
  * @description 일기에 첨부된 이미지 파일의 데이터 구조를 정의합니다.
  */
 export interface DiaryImage {
-    id: string // 이미지 고유 ID
+    id: Long | string // 이미지 고유 ID
     url: string // 이미지 접근 URL
     filename: string // 원본 파일명
     size: number // 파일 크기 (바이트)
@@ -38,11 +41,12 @@ export interface DiaryImage {
 export interface CreateDiaryRequest {
     title: string // 새 일기 제목
     content: string // 새 일기 내용
+    diaryDate: string // 일기 날짜
     //images?: File[] // 첨부할 이미지 파일 배열 (선택적)
 }
 
 export interface CreateDiaryResponse {
-    id: string
+    id: Long | string
 }
 
 
@@ -53,13 +57,10 @@ export interface CreateDiaryResponse {
  * @template T - 페이지네이션된 항목들의 타입.
  */
 export interface PaginatedResponse<T> {
-    data: T[] // 현재 페이지의 항목 배열
-    pagination: {
-        page: number // 현재 페이지 번호
-        limit: number // 페이지당 항목 수
-        total: number // 전체 항목 수
-        totalPages: number // 전체 페이지 수
-    }
+    content: T[] // 현재 페이지의 항목 배열
+    page: number // 현재 페이지 번호
+    size: number // 페이지당 항목 수
+    hasNext: boolean // 다음 페이지 존재 여부
 }
 
 /**
@@ -68,7 +69,7 @@ export interface PaginatedResponse<T> {
  *              API 명세에 따라 `username`, `profileImageUrl`, `providerId` 필드를 포함합니다.
  */
 export interface UserProfile {
-    id: string // 사용자 고유 ID
+    id: Long | string // 사용자 고유 ID
     username: string // 사용자 이름 (닉네임)
     email: string // 사용자 이메일
     profileImageUrl?: string // 사용자 프로필 이미지 URL (선택적)

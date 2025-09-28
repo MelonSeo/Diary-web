@@ -5,9 +5,10 @@ import { useRouter } from "next/navigation";
 import { Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
 import styles from "@/styles/DiaryActions.module.css"; // Import the new CSS module
+import Long from "long";
 
 interface DiaryActionsProps {
-  diaryId: string;
+  diaryId: Long | string;
 }
 
 export default function DiaryActions({ diaryId }: DiaryActionsProps) {
@@ -16,7 +17,7 @@ export default function DiaryActions({ diaryId }: DiaryActionsProps) {
   const handleDelete = async () => {
     if (window.confirm("정말로 이 일기를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.")) {
       try {
-        await deleteDiary(diaryId);
+        await deleteDiary(diaryId.toString());
         alert("일기가 성공적으로 삭제되었습니다."); // Success notification
         router.push("/my-diaries");
         router.refresh(); // Refresh the list page
@@ -29,7 +30,7 @@ export default function DiaryActions({ diaryId }: DiaryActionsProps) {
 
   return (
     <div className={styles.actionsContainer}>
-      <Link href={`/my-diaries/${diaryId}/update`} className={styles.editButton}>
+      <Link href={`/my-diaries/${diaryId.toString()}/update`} className={styles.editButton}>
         <Pencil className={styles.buttonIcon} />
         수정
       </Link>

@@ -16,10 +16,10 @@ export default function DiaryView({ diary }: DiaryViewProps) {
         <h1 className={styles.title}>{diary.title}</h1>
         <div className={styles.meta}>
           <span>
-            작성일: {new Date(diary.createdAt).toLocaleDateString("ko-KR")}
+            작성일: {diary.diaryDate ? new Date(diary.diaryDate).toLocaleDateString("ko-KR") : "날짜 없음"}
           </span>
           <div className={styles.actions}>
-            <DiaryActions diaryId={diary.id} />
+            <DiaryActions diaryId={diary.id.toString()} />
           </div>
         </div>
       </header>
@@ -33,7 +33,7 @@ export default function DiaryView({ diary }: DiaryViewProps) {
           <h2 className={styles.galleryTitle}>첨부된 이미지</h2>
           <div className={styles.imageList}>
             {diary.images.map(image => (
-              <div key={image.id} className={styles.imageWrapper}>
+              <div key={image.id.toString()} className={styles.imageWrapper}>
                 <img src={image.url} alt={image.filename || '일기 이미지'} className={styles.image} />
               </div>
             ))}

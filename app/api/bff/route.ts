@@ -104,7 +104,7 @@ async function apiRequest(req: NextRequest) {
             const { accessToken : newAccess } = await reissueRes.json();
             const isProd = process.env.NODE_ENV === "production";
 
-            const cookieCarrier = NextResponse.next(); //쿠키를 담아두기 위함
+            const cookieCarrier = new NextResponse(); //쿠키를 담아두기 위함
             cookieCarrier.cookies.set("accessToken", newAccess, {
                 httpOnly: true,
                 secure: isProd,
@@ -112,6 +112,7 @@ async function apiRequest(req: NextRequest) {
                 path: "/",
                 maxAge: 60 * 60,
             });
+
 
             backendResponse = await fetch(`${API_BASE}${endpoint}`, { ...config,
             headers: {

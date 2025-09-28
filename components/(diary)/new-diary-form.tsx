@@ -11,6 +11,7 @@ export default function NewDiaryForm() {
     const router = useRouter();
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
+    const [diaryDate, setDiaryDate] = useState(new Date().toISOString().split('T')[0]);
     const [images, setImages] = useState<File[]>([]);
     const [imagePreviews, setImagePreviews] = useState<string[]>([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -43,8 +44,7 @@ export default function NewDiaryForm() {
         }
 
         try {
-            const newDiary = await createDiary({ title, content,
-                /*images*/ });
+            const newDiary = await createDiary({ title, content, diaryDate });
             router.push(`/my-diaries/${newDiary.id}`);
         } catch (err) {
             setError("일기 저장에 실패했습니다. 다시 시도해주세요.");
@@ -66,6 +66,18 @@ export default function NewDiaryForm() {
                         id="title"
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
+                        className={styles.input}
+                        required
+                    />
+                </div>
+
+                <div className={styles.formGroup}>
+                    <label htmlFor="diaryDate" className={styles.label}>날짜</label>
+                    <input
+                        type="date"
+                        id="diaryDate"
+                        value={diaryDate}
+                        onChange={(e) => setDiaryDate(e.target.value)}
                         className={styles.input}
                         required
                     />

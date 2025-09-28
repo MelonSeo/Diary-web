@@ -1,3 +1,5 @@
+import Long from "long";
+
 interface routeRequestInit {
     requestMethod: string;
     endpoint: string;
@@ -5,13 +7,45 @@ interface routeRequestInit {
     headers?: HeadersInit;
 }
 
+const getBaseUrl = () => {
+    if (process.env.NEXT_PUBLIC_VERCEL_URL) {
+        return `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`;
+    }
+    // Assume localhost for development
+    return 'http://localhost:3000';
+};
+
+const jsonReviver = (key: string, value: any) => {
+    if ((key === 'id' || key === 'uid') && value !== null) {
+        if (typeof value === 'string' || typeof value === 'number' || (typeof value === 'object' && 'low' in value && 'high' in value)) {
+            return Long.fromValue(value);
+        }
+    }
+    return value;
+};
+
 async function request<T> ({ requestMethod, endpoint, body, headers}: routeRequestInit): Promise<T> {
-    const url = "/api/bff"
+    const url = `${getBaseUrl()}/api/bff`;
+
+    let finalHeaders: HeadersInit = headers || {};
+
+    // Check if running on the server
+    if (typeof window === 'undefined') {
+        const { cookies } = await import('next/headers');
+        // Apply the same workaround as for `params`
+        const cookieStore = await (cookies() as any);
+        const cookieHeader = cookieStore.getAll().map((c: { name: string; value: string; }) => `${c.name}=${c.value}`).join('; ');
+        finalHeaders = {
+            ...finalHeaders,
+            'Cookie': cookieHeader,
+        };
+    }
+
     console.log(`${requestMethod} ${endpoint} ${body}`);
     const res = await fetch(url, {
         method: "POST",
-        credentials: "include",
-        headers,
+        credentials: "include", // This is for browser-side fetch
+        headers: finalHeaders,
         body: JSON.stringify({
             endpoint,
             requestMethod,
@@ -28,10 +62,12 @@ async function request<T> ({ requestMethod, endpoint, body, headers}: routeReque
         throw new Error(text || `HTTP error ${res.status}`);
     }
 
-    //const ct = res.headers.get("content-type") || "";
-    //if (ct.includes("application/json")) return res.json();
-    //return res.text() as unknown as T;
-    const data: T = await res.json();
+    const text = await res.text();
+    if (!text) {
+        return null as T;
+    }
+    const data: T = JSON.parse(text, jsonReviver);
+    console.log("[API Response Data]:", data);
     return data;
 }
 
