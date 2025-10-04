@@ -101,7 +101,7 @@ async function apiRequest(req: NextRequest) {
                 return clear; //프론트쪽에서 redirect해야할듯
             }
 
-            const { accessToken : newAccess } = await reissueRes.json();
+            const { accessToken : newAccess, refreshToken: newRefresh } = await reissueRes.json();
             const isProd = process.env.NODE_ENV === "production";
 
             const cookieCarrier = new NextResponse(); //쿠키를 담아두기 위함
@@ -112,6 +112,15 @@ async function apiRequest(req: NextRequest) {
                 path: "/",
                 maxAge: 60 * 60,
             });
+            if (newRefresh) {
+                cookieCarrier.cookies.set("refreshToken", newRefresh, {
+                    httpOnly: true,
+                    secure: isProd,
+                    sameSite: "lax",
+                    path: "/",
+                    maxAge: 60 * 60 * 24 * 7, // 7일
+                });
+            }
 
 
             backendResponse = await fetch(`${API_BASE}${endpoint}`, { ...config,

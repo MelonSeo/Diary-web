@@ -16,6 +16,7 @@ export default function UpdateDiaryForm({ initialDiary }: UpdateDiaryFormProps) 
     const router = useRouter();
     const [title, setTitle] = useState(initialDiary.title);
     const [content, setContent] = useState(initialDiary.content);
+    const [diaryDate, setDiaryDate] = useState(initialDiary.diaryDate.split('T')[0]);
 
     // For new image uploads
     const [newImage, setNewImage] = useState<File | null>(null);
@@ -72,12 +73,11 @@ export default function UpdateDiaryForm({ initialDiary }: UpdateDiaryFormProps) 
         }
 
         try {
-            const dataToUpdate: { title: string; content: string; imageKeys?: string[] } = {
+            const dataToUpdate: UpdateDiaryRequest = {
                 title,
                 content,
+                diaryDate,
             };
-
-            let newImageKey: string | null = null;
 
             // Scenario 1: A new image was uploaded
             if (newImage) {
@@ -91,14 +91,13 @@ export default function UpdateDiaryForm({ initialDiary }: UpdateDiaryFormProps) 
                 if (!uploadResponse.ok) {
                     throw new Error("S3 이미지 업로드에 실패했습니다.");
                 }
-                newImageKey = key;
-                dataToUpdate.imageKeys = [newImageKey];
+                dataToUpdate.newImageKey = key;
             } 
             // Scenario 2: Existing image was removed, and no new one was added
             else if (isImageRemoved) {
-                dataToUpdate.imageKeys = []; // Send empty array to signify removal
+                dataToUpdate.clearImage = true; // Send flag to signify removal
             }
-            // Scenario 3: No change to image, do not send imageKeys property
+            // Scenario 3: No change to image, do not send any image-related properties
 
             const updated = await updateDiary(initialDiary.id as string, dataToUpdate);
             
@@ -126,6 +125,18 @@ export default function UpdateDiaryForm({ initialDiary }: UpdateDiaryFormProps) 
                         id="title"
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
+                        className={styles.input}
+                        required
+                    />
+                </div>
+
+                <div className={styles.formGroup}>
+                    <label htmlFor="diaryDate" className={styles.label}>날짜</label>
+                    <input
+                        type="date"
+                        id="diaryDate"
+                        value={diaryDate}
+                        onChange={(e) => setDiaryDate(e.target.value)}
                         className={styles.input}
                         required
                     />

@@ -67,8 +67,8 @@ export default function NewDiaryForm() {
             }
 
             // 3. Create diary with the image key
-            console.log("Creating diary with data:", { title, content, diaryDate, imageKey: uploadedImageKey });
-            const newDiary = await createDiary({ title, content, diaryDate, imageKey: uploadedImageKey });
+            console.log("Creating diary with data:", { title, content, diaryDate, objectKey: uploadedImageKey });
+            const newDiary = await createDiary({ title, content, diaryDate, objectKey: uploadedImageKey });
             console.log("Response from createDiary:", newDiary);
             
             // 4. Clean up object URL and redirect
