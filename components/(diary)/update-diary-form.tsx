@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import styles from "@/styles/NewDiaryForm.module.css"; // Reusing styles from NewDiaryForm
-import { updateDiary } from "@/lib/client-api";
+import {getS3DownloadUrl, getS3PresignedUrl, updateDiary} from "@/lib/client-api";
 import ImageUploader from "@/components/ui/image-uploader";
 import FormActions from "@/components/ui/form-actions";
 import { DiaryEntry } from "@/types/diary";
@@ -16,32 +16,48 @@ export default function UpdateDiaryForm({ initialDiary }: UpdateDiaryFormProps) 
     const router = useRouter();
     const [title, setTitle] = useState(initialDiary.title);
     const [content, setContent] = useState(initialDiary.content);
-    // For simplicity, image update is not fully implemented here.
-    // In a real app, you'd handle existing images and new uploads more robustly.
-    const [images, setImages] = useState<File[]>([]);
-    const [imagePreviews, setImagePreviews] = useState<string[]>(initialDiary.images.map(img => img.url));
+
+    // For new image uploads
+    const [newImage, setNewImage] = useState<File | null>(null);
+    // For display (can be existing URL or new object URL)
+    const [imagePreview, setImagePreview] = useState<string | null>(null);
+    // To track if the user explicitly removed the existing image
+    const [isImageRemoved, setIsImageRemoved] = useState(false);
+
+    useEffect(() => {
+        // Fetch the initial image URL if it exists and a new image hasn't been staged
+        if (initialDiary.imageKey && !newImage) {
+            getS3DownloadUrl(initialDiary.imageKey)
+                .then(data => setImagePreview(data.url))
+                .catch(err => {
+                    console.error("Failed to fetch initial image for update form:", err);
+                });
+        }
+    }, [initialDiary.imageKey, newImage]);
+
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    // Note: For a full implementation, you'd need to handle existing images
-    // (e.g., display them, allow deletion, and send updates to the API).
-    // This example focuses on text content update.
-
-    const handleImageChange = (files: FileList | null) => {
-        if (files) {
-            const newFiles = Array.from(files);
-            const newPreviews = newFiles.map(file => URL.createObjectURL(file));
-            setImages(prev => [...prev, ...newFiles]);
-            setImagePreviews(prev => [...prev, ...newPreviews]);
+    const handleImageChange = (file: File | null) => {
+        if (file) {
+            // Clean up previous object URL if it exists
+            if (newImage && imagePreview) {
+                URL.revokeObjectURL(imagePreview!);
+            }
+            setNewImage(file);
+            setImagePreview(URL.createObjectURL(file));
+            setIsImageRemoved(false); // A new image is selected, so it's not "removed"
         }
     };
 
-    const handleRemoveImage = (index: number) => {
-        // This currently only removes newly added images from preview/state.
-        // For existing images, you'd need to send a delete request to the API.
-        URL.revokeObjectURL(imagePreviews[index]); // Clean up memory for new images
-        setImages(prev => prev.filter((_, i) => i !== index));
-        setImagePreviews(prev => prev.filter((_, i) => i !== index));
+    const handleRemoveImage = () => {
+        // Clean up object URL if the preview was from a new file
+        if (newImage && imagePreview) {
+            URL.revokeObjectURL(imagePreview);
+        }
+        setNewImage(null);
+        setImagePreview(null);
+        setIsImageRemoved(true); // Mark that the image has been removed
     };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -56,10 +72,40 @@ export default function UpdateDiaryForm({ initialDiary }: UpdateDiaryFormProps) 
         }
 
         try {
-            const updated =await updateDiary(initialDiary.id as string, { title, content });
+            const dataToUpdate: { title: string; content: string; imageKeys?: string[] } = {
+                title,
+                content,
+            };
+
+            let newImageKey: string | null = null;
+
+            // Scenario 1: A new image was uploaded
+            if (newImage) {
+                const { url, key, contentType } = await getS3PresignedUrl(newImage.name, newImage.type);
+                const uploadResponse = await fetch(url, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': contentType },
+                    body: newImage,
+                });
+
+                if (!uploadResponse.ok) {
+                    throw new Error("S3 이미지 업로드에 실패했습니다.");
+                }
+                newImageKey = key;
+                dataToUpdate.imageKeys = [newImageKey];
+            } 
+            // Scenario 2: Existing image was removed, and no new one was added
+            else if (isImageRemoved) {
+                dataToUpdate.imageKeys = []; // Send empty array to signify removal
+            }
+            // Scenario 3: No change to image, do not send imageKeys property
+
+            const updated = await updateDiary(initialDiary.id as string, dataToUpdate);
+            
             alert("일기가 성공적으로 수정되었습니다.");
             router.push(`/my-diaries/${updated.id.toString()}`);
             router.refresh();
+
         } catch (err) {
             setError("일기 수정에 실패했습니다. 다시 시도해주세요.");
             console.error(err);
@@ -96,11 +142,10 @@ export default function UpdateDiaryForm({ initialDiary }: UpdateDiaryFormProps) 
                     />
                 </div>
 
-                {/* ImageUploader is included but full image update logic is simplified for this example */}
                 <div className={styles.formGroup}>
                     <ImageUploader
-                        imagePreviews={imagePreviews}
-                        onImagesChange={handleImageChange}
+                        imagePreview={imagePreview}
+                        onImageChange={handleImageChange}
                         onRemoveImage={handleRemoveImage}
                     />
                 </div>

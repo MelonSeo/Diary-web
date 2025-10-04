@@ -14,23 +14,11 @@ export interface DiaryEntry {
     id: Long | string // 일기 고유 ID
     title: string // 일기 제목
     content: string // 일기 내용
-    images: DiaryImage[] // 일기에 첨부된 이미지 배열
+    imageKey?: string // 일기에 첨부된 이미지 키
     diaryDate: string // 일기 날짜 (YYYY-MM-DD 형식 문자열)
     createdAt: string // 일기 생성 날짜 (ISO 8601 형식 문자열)
     updatedAt: string // 일기 마지막 업데이트 날짜 (ISO 8601 형식 문자열)
     uid?: Long | string
-}
-
-/**
- * @interface DiaryImage
- * @description 일기에 첨부된 이미지 파일의 데이터 구조를 정의합니다.
- */
-export interface DiaryImage {
-    id: Long | string // 이미지 고유 ID
-    url: string // 이미지 접근 URL
-    filename: string // 원본 파일명
-    size: number // 파일 크기 (바이트)
-    mimeType: string // 파일 MIME 타입 (예: "image/jpeg")
 }
 
 /**
@@ -42,11 +30,21 @@ export interface CreateDiaryRequest {
     title: string // 새 일기 제목
     content: string // 새 일기 내용
     diaryDate: string // 일기 날짜
-    //images?: File[] // 첨부할 이미지 파일 배열 (선택적)
+    imageKey?: string // S3에 업로드된 이미지 키 (선택적)
 }
 
 export interface CreateDiaryResponse {
     id: Long | string
+}
+
+/**
+ * @interface UpdateDiaryRequest
+ * @description 일기를 수정할 때 백엔드로 전송되는 요청 데이터 구조를 정의합니다.
+ */
+export interface UpdateDiaryRequest {
+    title?: string; // 수정할 일기 제목 (선택적)
+    content?: string; // 수정할 일기 내용 (선택적)
+    imageKeys?: string[]; // 수정될 이미지 키 배열 (선택적). 빈 배열은 이미지 삭제를 의미.
 }
 
 

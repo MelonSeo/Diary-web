@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "@/styles/NewDiaryForm.module.css";
-import { createDiary } from "@/lib/client-api";
+import { createDiary, getS3PresignedUrl } from "@/lib/client-api";
 import ImageUploader from "@/components/ui/image-uploader";
 import FormActions from "@/components/ui/form-actions";
 
@@ -12,24 +12,24 @@ export default function NewDiaryForm() {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [diaryDate, setDiaryDate] = useState(new Date().toISOString().split('T')[0]);
-    const [images, setImages] = useState<File[]>([]);
-    const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+    const [image, setImage] = useState<File | null>(null);
+    const [imagePreview, setImagePreview] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    const handleImageChange = (files: FileList | null) => {
-        if (files) {
-            const newFiles = Array.from(files);
-            const newPreviews = newFiles.map(file => URL.createObjectURL(file));
-            setImages(prev => [...prev, ...newFiles]);
-            setImagePreviews(prev => [...prev, ...newPreviews]);
+    const handleImageChange = (file: File | null) => {
+        if (file) {
+            setImage(file);
+            setImagePreview(URL.createObjectURL(file));
         }
     };
 
-    const handleRemoveImage = (index: number) => {
-        URL.revokeObjectURL(imagePreviews[index]); // Clean up memory
-        setImages(prev => prev.filter((_, i) => i !== index));
-        setImagePreviews(prev => prev.filter((_, i) => i !== index));
+    const handleRemoveImage = () => {
+        if (imagePreview) {
+            URL.revokeObjectURL(imagePreview);
+        }
+        setImage(null);
+        setImagePreview(null);
     };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -44,10 +44,41 @@ export default function NewDiaryForm() {
         }
 
         try {
-            const newDiary = await createDiary({ title, content, diaryDate });
+            let uploadedImageKey: string | undefined;
+
+            if (image) {
+                // 1. Get pre-signed URL for the image
+                const { url, key, contentType } = await getS3PresignedUrl(image.name, image.type);
+
+                // 2. Upload image to S3
+                const uploadResponse = await fetch(url, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': contentType },
+                    body: image,
+                });
+                console.log("Uploaded image to S3");
+
+                if (!uploadResponse.ok) {
+                    const errorText = await uploadResponse.text();
+                    throw new Error(`S3 Upload failed: ${uploadResponse.status}. ${errorText}`);
+                }
+                console.log(uploadResponse);
+                uploadedImageKey = key;
+            }
+
+            // 3. Create diary with the image key
+            console.log("Creating diary with data:", { title, content, diaryDate, imageKey: uploadedImageKey });
+            const newDiary = await createDiary({ title, content, diaryDate, imageKey: uploadedImageKey });
+            console.log("Response from createDiary:", newDiary);
+            
+            // 4. Clean up object URL and redirect
+            if (imagePreview) {
+                URL.revokeObjectURL(imagePreview);
+            }
             router.push(`/my-diaries/${newDiary.id}`);
+
         } catch (err) {
-            setError("일기 저장에 실패했습니다. 다시 시도해주세요.");
+            setError("일기 저장에 실패했습니다. 이미지 업로드 또는 서버 통신에 문제가 발생했을 수 있습니다.");
             console.error(err);
             setIsSubmitting(false);
         }
@@ -96,8 +127,8 @@ export default function NewDiaryForm() {
 
                 <div className={styles.formGroup}>
                     <ImageUploader
-                        imagePreviews={imagePreviews}
-                        onImagesChange={handleImageChange}
+                        imagePreview={imagePreview}
+                        onImageChange={handleImageChange}
                         onRemoveImage={handleRemoveImage}
                     />
                 </div>

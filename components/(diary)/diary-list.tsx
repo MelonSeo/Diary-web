@@ -46,15 +46,10 @@ export default function DiaryList({ diariesData, currentPage }: DiaryListProps) 
                                     {diary.content.length > 100 ? `${diary.content.substring(0, 100)}...` : diary.content}
                                 </p>
                                 <div className={styles.imagePreview}>
-                                    {diary.images.length > 0 ? (
-                                        <>
-                                            <img
-                                                src={diary.images[0].url || "/placeholder.svg"}
-                                                alt="일기 이미지"
-                                                className={styles.previewImage}
-                                            />
-                                            {diary.images.length > 1 && <span className={styles.imageCount}>+{diary.images.length - 1}</span>}
-                                        </>
+                                    {diary.imageKey ? (
+                                        <div className={styles.noImageContainer}>
+                                            <span className={styles.noImageText}>Image</span>
+                                        </div>
                                     ) : (
                                         <div className={styles.noImageContainer}>
                                             <span className={styles.noImageText}>No Image</span>
