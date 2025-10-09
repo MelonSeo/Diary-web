@@ -30,7 +30,7 @@ export interface CreateDiaryRequest {
     title: string // 새 일기 제목
     content: string // 새 일기 내용
     diaryDate: string // 일기 날짜
-    objectKey?: string // S3에 업로드된 이미지 키 (선택적)
+    imageKey?: string // S3에 업로드된 이미지 키 (선택적)
 }
 
 export interface CreateDiaryResponse {

@@ -49,6 +49,7 @@ export default function NewDiaryForm() {
             if (image) {
                 // 1. Get pre-signed URL for the image
                 const { url, key, contentType } = await getS3PresignedUrl(image.name, image.type);
+                console.log("S3 pre-signed URL:", url);
 
                 // 2. Upload image to S3
                 const uploadResponse = await fetch(url, {
@@ -67,8 +68,8 @@ export default function NewDiaryForm() {
             }
 
             // 3. Create diary with the image key
-            console.log("Creating diary with data:", { title, content, diaryDate, objectKey: uploadedImageKey });
-            const newDiary = await createDiary({ title, content, diaryDate, objectKey: uploadedImageKey });
+            console.log("Creating diary with data:", { title, content, diaryDate, imageKey: uploadedImageKey });
+            const newDiary = await createDiary({ title, content, diaryDate, imageKey: uploadedImageKey });
             console.log("Response from createDiary:", newDiary);
             
             // 4. Clean up object URL and redirect

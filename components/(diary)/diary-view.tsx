@@ -21,6 +21,7 @@ export default function DiaryView({ diary }: DiaryViewProps) {
         try {
           setIsLoading(true);
           const { url } = await getS3DownloadUrl(diary.imageKey);
+          console.log("S3 download URL:", url);
           setImageUrl(url);
         } catch (err) {
           console.error("Failed to fetch image URL:", err);
