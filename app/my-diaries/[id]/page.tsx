@@ -11,9 +11,7 @@ interface PageProps {
 // 동적 메타데이터 생성
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
     try {
-        // The error "params should be awaited" is unconventional.
-        // This is a workaround based on a literal interpretation of the error.
-        const { id } = await (params as any);
+        const { id } = params;
         const diary = await getDiary(id);
         return {
             title: `${diary.title} - 나의 일기장`,
@@ -28,9 +26,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function DiaryPage({ params }: PageProps) {
-    // The error "params should be awaited" is unconventional.
-    // This is a workaround based on a literal interpretation of the error.
-    const { id } = await (params as any);
+    const { id } = params;
     
     try {
         console.log("DiaryPage id:", id);
