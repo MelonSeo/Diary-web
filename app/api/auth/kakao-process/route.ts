@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: "Authorization code is missing." }, { status: 400 })
         }
 
-        const kakaoClientId = process.env.NEXT_PUBLIC_KAKAO_REST_KEY
+        const kakaoClientId = process.env.KAKAO_REST_KEY
         const kakaoRedirectUri = process.env.NEXT_PUBLIC_KAKAO_LOGIN_REDIRECT_URI
         const apiBaseUrl = process.env.API_BASE_URL || process.env.NEXT_PUBLIC_API_BASE_URL
 
