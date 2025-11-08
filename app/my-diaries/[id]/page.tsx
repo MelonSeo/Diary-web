@@ -5,7 +5,7 @@ import DiaryView from "@/components/(diary)/diary-view"; // Import the new exter
 import Long from "long";
 
 interface PageProps {
-    params: { id: string };
+    params: Promise<{ id: string }>;
 }
 
 // 동적 메타데이터 생성

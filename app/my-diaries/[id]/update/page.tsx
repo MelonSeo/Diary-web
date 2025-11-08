@@ -6,7 +6,7 @@ import { DiaryEntry } from "@/types/diary";
 import Long from "long";
 
 interface PageProps {
-    params: { id: string };
+    params: Promise<{ id: string }>;
 }
 
 // 동적 메타데이터 생성
