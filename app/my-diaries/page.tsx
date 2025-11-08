@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 }
 
 interface PageProps {
-    searchParams: Promise<{ page?: string }> // URL 쿼리 파라미터 (페이지 번호)
+    searchParams: { page?: string } // URL 쿼리 파라미터 (페이지 번호)
 }
 
 /**
@@ -76,8 +76,7 @@ export default async function MyDiariesPage({ searchParams }: PageProps) {
     // 이 페이지는 이미 로그인된 상태에서 접근한다고 가정합니다.
     // 만약 직접 접근 시 로그인 체크가 필요하다면, app/page.tsx와 유사한 로직을 추가할 수 있습니다.
 
-    const resolvedSearchParams = await searchParams;
-    const currentPage = Number(resolvedSearchParams.page) || 0;
+    const currentPage = Number(searchParams.page) || 0;
 
     // 일기 데이터 가져오기
     const diariesData = await getDiaries(currentPage);
