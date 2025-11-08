@@ -7,15 +7,16 @@ export const metadata: Metadata = {
 };
 
 interface PageProps {
-  searchParams: { year?: string; month?: string };
+  searchParams: Promise<{ year?: string; month?: string }>;
 }
 
-export default function CalendarPage({ searchParams }: PageProps) {
+export default async function CalendarPage({ searchParams }: PageProps) {
+  const resolvedSearchParams = await searchParams;
   const currentYear = new Date().getFullYear();
   const currentMonth = new Date().getMonth() + 1; // getMonth()는 0부터 시작하므로 +1
 
-  const year = Number(searchParams.year) || currentYear;
-  const month = Number(searchParams.month) || currentMonth;
+  const year = Number(resolvedSearchParams.year) || currentYear;
+  const month = Number(resolvedSearchParams.month) || currentMonth;
 
   return <CalendarView initialYear={year} initialMonth={month} />;
 }
