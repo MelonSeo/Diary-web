@@ -43,18 +43,7 @@ async function getDiaries(page: number): Promise<PaginatedResponse<DiaryEntry>> 
                 id: Long.fromNumber(i + 1),
                 title: `샘플 일기 ${i + 1}`,
                 content: `이것은 ${i + 1}번째 샘플 일기입니다. CSS Modules로 스타일링되었습니다.`,
-                images:
-                    i % 3 === 0
-                        ? [
-                            {
-                                id: Long.fromNumber(i),
-                                url: "/placeholder.svg?height=200&width=300&text=Sample Image", // 플레이스홀더 이미지
-                                filename: "sample.jpg",
-                                size: 1024,
-                                mimeType: "image/jpeg",
-                            },
-                        ]
-                        : [],
+                imageKey: i % 3 === 0 ? `sample-image-${i}.jpg` : undefined,
                 createdAt: new Date(Date.now() - i * 86400000).toISOString(), // 생성 날짜 (과거로 갈수록 오래된 일기)
                 updatedAt: new Date(Date.now() - i * 86400000).toISOString(), // 업데이트 날짜
                 diaryDate: new Date(Date.now() - i * 86400000).toISOString().split('T')[0], // 일기 날짜 (YYYY-MM-DD)
@@ -111,10 +100,6 @@ export default async function MyDiariesPage({ searchParams }: PageProps) {
         content: diariesData.content.map(diary => ({
             ...diary,
             id: diary.id.toString(),
-            images: (diary.images || []).map(img => ({
-                ...img,
-                id: img.id.toString(),
-            })),
             // uid가 있다면 변환
             ...(diary.uid && { uid: diary.uid.toString() }),
         })),
