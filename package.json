@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "next dev",
+    "build": "next build",
     "gemini": "npx https://github.com/google-gemini/gemini-cli"
   },
   "repository": {
