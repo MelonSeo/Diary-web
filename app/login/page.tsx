@@ -7,10 +7,10 @@ export const metadata: Metadata ={
 }
 
 interface LoginPageProps {
-    searchParams: {
+    searchParams: Promise<{
         error?: string;
         error_description?: string;
-    }
+    }>
 }
 
 /*async function getKakaoAuthUrl() {
@@ -55,8 +55,9 @@ function getErrorMessage(errorCode: string): string {
     return errorMessages[errorCode] || errorMessages.default_error
 }
 
-export default function LoginPage({searchParams}: LoginPageProps) {
-    const errorMessage = searchParams.error ? getErrorMessage(searchParams.error) : null
+export default async function LoginPage({searchParams}: LoginPageProps) {
+    const params = await searchParams;
+    const errorMessage = params.error ? getErrorMessage(params.error) : null
 
     return (
         <LoginForm errorMessage={errorMessage} />
