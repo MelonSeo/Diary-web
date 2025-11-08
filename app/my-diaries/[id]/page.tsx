@@ -11,7 +11,7 @@ interface PageProps {
 // 동적 메타데이터 생성
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
     try {
-        const { id } = params;
+        const { id } = await (params as any);
         const diary = await getDiary(id);
         return {
             title: `${diary.title} - 나의 일기장`,
@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function DiaryPage({ params }: PageProps) {
-    const { id } = params;
+    const { id } = await (params as any);
     
     try {
         console.log("DiaryPage id:", id);
