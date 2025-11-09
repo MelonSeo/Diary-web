@@ -37,8 +37,8 @@ async function apiRequest(req: NextRequest) {
 
     try {
         const cookieStore = await cookies();
-        const accessToken = cookieStore.get("accessToken").value;
-        const refreshToken = cookieStore.get("refreshToken").value;
+        const accessToken = cookieStore.get("accessToken")?.value;
+        const refreshToken = cookieStore.get("refreshToken")?.value;
 
         const endpoint = body?.endpoint;
         const method = body?.requestMethod;
