@@ -34,18 +34,7 @@ export default function Header() {
             setUser(response) // 조회된 사용자 정보로 상태 업데이트
         } catch (error) {
             console.warn("Failed to fetch user info:", error)
-            // API 서버가 연결되지 않았을 때 목업 데이터 사용
-            if (error instanceof Error) {
-                setUser({
-                    id: Long.fromNumber(1),
-                    username: "테스트 사용자", // 'name' 대신 'username' 사용
-                    email: "test@example.com",
-                    profileImageUrl: "/placeholder.svg?height=32&width=32&text=User", // 'profileImage' 대신 'profileImageUrl' 사용
-                    provider: "KAKAO",
-                    providerId: "mock-provider-id-1",
-                    //createdAt: new Date().toISOString(),
-                })
-            }
+            setUser(null);
         }
     }
 
