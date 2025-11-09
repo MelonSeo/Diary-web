@@ -25,37 +25,6 @@ interface PageProps {
 }
 
 /**
- * @function getDiaries
- * @description 서버에서 일기 데이터를 가져오는 비동기 함수.
- *              API 서버 연결 실패 시 목업 데이터를 반환하여 개발 편의성을 높입니다.
- * @param {number} page - 현재 페이지 번호 (1부터 시작).
- * @returns {Promise<PaginatedResponse<DiaryEntry>>} - 페이지네이션된 일기 데이터.
- */
-async function getDiaries(page: number): Promise<PaginatedResponse<DiaryEntry>> {
-    try {
-        return await getClientDiaries(page, 10)
-    } catch (error) {
-        console.warn("API 서버 연결 실패, 목업 데이터 사용:", error)
-
-        // API 서버 연결 실패 시 목업 데이터 반환
-        return {
-            content: Array.from({ length: 8 }, (_, i) => ({
-                id: Long.fromNumber(i + 1),
-                title: `샘플 일기 ${i + 1}`,
-                content: `이것은 ${i + 1}번째 샘플 일기입니다. CSS Modules로 스타일링되었습니다.`,
-                imageKey: i % 3 === 0 ? `sample-image-${i}.jpg` : undefined,
-                createdAt: new Date(Date.now() - i * 86400000).toISOString(), // 생성 날짜 (과거로 갈수록 오래된 일기)
-                updatedAt: new Date(Date.now() - i * 86400000).toISOString(), // 업데이트 날짜
-                diaryDate: new Date(Date.now() - i * 86400000).toISOString().split('T')[0], // 일기 날짜 (YYYY-MM-DD)
-            })),
-            page: page,
-            size: 10,
-            hasNext: page < 1, // 목업 데이터는 2페이지까지만 있다고 가정 (0-indexed이므로 page < 1은 0페이지만 존재)
-        }
-    }
-}
-
-/**
  * @function MyDiariesPage
  * @description 내 일기장 목록 페이지의 Server Component.
  *              일기 데이터 로딩 및 UI 컴포넌트 렌더링을 담당합니다.
@@ -69,7 +38,7 @@ export default async function MyDiariesPage({ searchParams }: PageProps) {
     const currentPage = Number(resolvedSearchParams.page) || 0;
 
     // 일기 데이터 가져오기
-    const diariesData = await getDiaries(currentPage);
+    const diariesData = await getClientDiaries(currentPage, 10);
 
     // 데이터가 유효하지 않은 경우 에러 메시지 표시
     if (!diariesData || !diariesData.content) {

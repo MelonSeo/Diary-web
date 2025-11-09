@@ -29,22 +29,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function UpdateDiaryPage({ params }: PageProps) {
     const { id } = await (params as any);
 
-    let diary: DiaryEntry | null = null;
-    try {
-        diary = await getDiary(id);
-    } catch (error) {
-        console.warn(`[Dev] API 호출 실패, ${id}에 대한 목업 데이터를 사용합니다.`, error);
-        // 개발 모드에서 API 호출 실패 시 목업 데이터 사용
-        diary = {
-            id: Long.fromString(id),
-            title: "테스트 일기 (수정용): 개발 중",
-            content: `이것은 개발 환경에서만 보이는 테스트용 일기입니다.\n\nAPI 서버가 실행 중이 아닐 때, 이 데이터가 표시됩니다.\n\n- 목업 데이터는 여러 줄을 가질 수 있습니다.\n- 이미지도 포함할 수 있습니다.`,
-            diaryDate: new Date().toISOString().split('T')[0], // YYYY-MM-DD 형식
-            imageKey: "mock-image-key.jpg", // Updated from images array
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-        };
-    }
+    const diary = await getDiary(id);
 
     if (!diary) {
         notFound(); // 데이터가 없으면 404 페이지로 리다이렉트
