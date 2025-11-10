@@ -186,4 +186,19 @@
     }
 }
 
+.privacyPolicyLink {
+    margin-top: 1rem;
+    text-align: center;
+    font-size: 0.875rem; /* text-sm */
+}
+
+.privacyPolicyLink a {
+    color: #6b7280; /* text-gray-600 */
+    text-decoration: none;
+}
+
+.privacyPolicyLink a:hover {
+    text-decoration: underline;
+}
+
 

@@ -97,6 +97,9 @@ export default function LoginForm({errorMessage}: LoginFormProps) {
                         </svg>
                         <span className={styles.buttonText}>Sign in with Google</span>
                     </button>
+                    <div className={styles.privacyPolicyLink}>
+                        <a href="/privacy" target="_blank" rel="noopener noreferrer">개인정보 처리방침</a>
+                    </div>
                 </div>
             </div>
         </div>
