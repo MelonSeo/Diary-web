@@ -96,6 +96,9 @@ export default function Header() {
                         <Link href="/about-us" className={styles.navLink}>
                             About Us
                         </Link>
+                        <Link href="/privacy" className={styles.navLink}>
+                            개인정보 처리방침
+                        </Link>
                     </nav>
                 </div>
 

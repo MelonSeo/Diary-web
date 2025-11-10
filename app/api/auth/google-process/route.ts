@@ -38,13 +38,20 @@ export async function GET(req: NextRequest) {
     const username = verifiedProfile.name.toString();
 
 try {
-    console.log(`${apiBaseUrl}/auth/login`);
+    const requestBody = {
+        provider, providerId, email, username,
+    };
+
+    console.log("--- Sending Login Request to Backend (Google) ---");
+    console.log("Request URL:", `${apiBaseUrl}/auth/login`);
+    console.log("Request Method:", "POST");
+    console.log("Request Body:", JSON.stringify(requestBody, null, 2));
+    console.log("-------------------------------------------------");
+
     const backendRes = await fetch(`${apiBaseUrl}/auth/login`!, {
         method: "POST",
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({
-            provider, providerId, email, username,
-        }),
+        body: JSON.stringify(requestBody),
     });
     if (!backendRes.ok) {
         const errorData = await backendRes.json();

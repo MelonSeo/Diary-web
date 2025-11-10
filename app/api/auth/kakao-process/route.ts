@@ -1,5 +1,4 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { setCookie } from "nookies"
 
 /**
  * @file app/api/auth/kakao-process/route.ts
@@ -71,21 +70,25 @@ export async function POST(request: NextRequest) {
 
         // 3. 우리 Spring Boot 백엔드 서버로 사용자 정보 전송
         // 백엔드는 이 정보를 바탕으로 로그인/회원가입 처리 및 우리 서비스의 JWT 발급
-        console.log("Sending user info to backend for login...")
-        console.log(`${apiBaseUrl}/auth/login`);
+        const requestBody = {
+            provider: "KAKAO",
+            providerId: kakaoUserInfo.id.toString(), // 카카오 사용자 ID
+            email: kakaoUserInfo.kakao_account?.email, // 이메일
+            username: kakaoUserInfo.kakao_account?.profile.nickname, // 닉네임
+        };
+
+        console.log("--- Sending Login Request to Backend (Kakao) ---");
+        console.log("Request URL:", `${apiBaseUrl}/auth/login`);
+        console.log("Request Method:", "POST");
+        console.log("Request Body:", JSON.stringify(requestBody, null, 2));
+        console.log("------------------------------------------------");
+
         const backendLoginResponse = await fetch(`${apiBaseUrl}/auth/login`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({
-                provider: "KAKAO",
-                providerId: kakaoUserInfo.id.toString(), // 카카오 사용자 ID
-                email: kakaoUserInfo.kakao_account?.email, // 이메일
-                username: kakaoUserInfo.kakao_account?.profile.nickname, // 닉네임
-                //profileImage: kakaoUserInfo.properties?.profile_image, // 프로필 이미지
-                // 필요한 다른 정보 추가
-            }),
+            body: JSON.stringify(requestBody),
         })
 
         if (!backendLoginResponse.ok) {
