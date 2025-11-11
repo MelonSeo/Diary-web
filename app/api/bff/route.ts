@@ -38,9 +38,10 @@ async function apiRequest(req: NextRequest) {
     }
 
     try {
-        const cookieHeader = req.headers.get("cookie");
-        const accessToken = cookieHeader?.split(';').find(c => c.trim().startsWith('accessToken='))?.split('=')[1];
-        const refreshToken = cookieHeader?.split(';').find(c => c.trim().startsWith('refreshToken='))?.split('=')[1];
+        const cookieHeader = req.headers.get("cookie") || "";
+        const accessToken = (cookieHeader.match(/accessToken=([^;]+)/) || [])[1];
+        const refreshToken = (cookieHeader.match(/refreshToken=([^;]+)/) || [])[1];
+        console.log("[bff] Parsed tokens from cookie header:", { accessToken, refreshToken });
 
         const endpoint = body?.endpoint;
         const method = body?.requestMethod;
