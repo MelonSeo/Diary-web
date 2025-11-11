@@ -1,6 +1,6 @@
 "use client" // 이 파일은 클라이언트 컴포넌트임을 명시
 
-import { useState, useEffect, useTransition } from "react"
+import { useState, useTransition } from "react"
 import { useRouter } from "next/navigation"
 import { User, Mail, Trash2, Save, ArrowLeft } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -10,143 +10,77 @@ import { Label } from "@/components/ui/label"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import type { UserProfile, UpdateUserProfile } from "@/types/diary"
 import styles from "@/styles/UserProfileForm.module.css"
-import {deleteUser, getUserProfile, logout, updateUserProfile} from "@/lib/client-api";
-import Long from "long"; // CSS Modules 임포트
+import {deleteUser, updateUserProfile, logout} from "@/lib/client-api";
 
 /**
- * @file components/user-profile-form.tsx
+ * @file components/user/user-profile-form.tsx
  * @description 사용자 프로필 정보를 표시하고 수정, 회원 탈퇴 기능을 제공하는 클라이언트 컴포넌트.
- *              API 명세에 따라 사용자 정보를 가져오고, 업데이트하며, 계정을 삭제합니다.
+ *              데이터는 상위 컴포넌트로부터 props로 전달받습니다.
  */
 
-export default function UserProfileForm() {
+interface UserProfileFormProps {
+    userProfile: UserProfile;
+}
+
+export default function UserProfileForm({ userProfile }: UserProfileFormProps) {
     const router = useRouter()
-    const [user, setUser] = useState<UserProfile | null>(null)
-    const [username, setUsername] = useState("")
-    const [profileImageUrl, setProfileImageUrl] = useState("")
-    const [isLoading, setIsLoading] = useState(true)
+    // 폼 입력을 위한 상태. 초기값은 prop으로 받은 데이터로 설정.
+    const [username, setUsername] = useState(userProfile.username)
+    const [profileImageUrl, setProfileImageUrl] = useState(userProfile.profileImageUrl || "")
     const [isUpdating, startUpdateTransition] = useTransition()
     const [isDeleting, startDeleteTransition] = useTransition()
-    const [error, setError] = useState<string | null>(null)
-
-    const fetchUserProfile = async () => {
-        try {
-            console.log("Fetching user profile");
-            const response = await getUserProfile()
-            setUser(response)
-            setUsername(response.username)
-            setProfileImageUrl(response.profileImageUrl || "")
-        } catch (err) {
-            console.error("Failed to fetch user profile:", err)
-            setError("프로필 정보를 불러오는 데 실패했습니다.")
-            // API 서버 연결 실패 시 목업 데이터 사용
-            if (err instanceof Error) {
-                const mockUser: UserProfile = {
-                    id: Long.fromNumber(1),
-                    username: "테스트 사용자",
-                    email: "test@example.com",
-                    profileImageUrl: "/placeholder.svg?height=100&width=100&text=Mock User",
-                    provider: "KAKAO",
-                    providerId: "mock-provider-id-1",
-                    //createdAt: new Date().toISOString(),
-                }
-                setUser(mockUser)
-                setUsername(mockUser.username)
-                setProfileImageUrl(mockUser.profileImageUrl || "")
-                setError("API 서버에 연결할 수 없습니다. 목업 데이터를 표시합니다.")
-            }
-        } finally {
-            setIsLoading(false)
-        }
-    }
-
-    useEffect(() => {
-        fetchUserProfile()
-
-        const handleProfileUpdate = () => {
-            console.log("[header] Profile updated event received. Refetching user info...");
-            fetchUserProfile();
-        }
-
-        window.addEventListener("profileUpdated", handleProfileUpdate);
-
-        return () => {
-            window.removeEventListener("profileUpdated", handleProfileUpdate);
-        }
-    }, [])
+    const [formError, setFormError] = useState<string | null>(null)
 
     const handleUpdateProfile = () => {
         startUpdateTransition(async () => {
-            setError(null)
+            setFormError(null)
             if (!username.trim()) {
-                setError("닉네임을 입력해주세요.")
+                setFormError("닉네임을 입력해주세요.")
                 return
             }
 
             const updateData: UpdateUserProfile = {
                 username: username.trim(),
-                profileImageUrl: profileImageUrl.trim() || undefined, // 빈 문자열이면 undefined로 보내지 않음
+                profileImageUrl: profileImageUrl.trim() || undefined,
             }
 
+            console.log("[UserProfileForm] Attempting to update profile...");
+            console.log("[UserProfileForm] Update data:", updateData);
+
             try {
-                const response = await updateUserProfile(updateData)
-                /*setUsername(response.username)
-                setProfileImageUrl(response.profileImageUrl || "")*/
+                await updateUserProfile(updateData)
+                console.log("[UserProfileForm] Profile update API call successful.");
                 alert("프로필이 성공적으로 업데이트되었습니다!")
-                window.dispatchEvent(new CustomEvent("profileUpdated")) // 프로필 업데이트 이벤트 발생
+                // 부모 컴포넌트나 다른 컴포넌트에 변경을 알리기 위한 이벤트
+                window.dispatchEvent(new CustomEvent("profileUpdated"))
+                router.refresh(); // 서버 컴포넌트 데이터를 새로고침하여 UI에 반영
             } catch (err) {
-                console.error("Failed to update profile:", err)
-                setError("프로필 업데이트에 실패했습니다. 다시 시도해주세요.")
+                console.error("[UserProfileForm] Failed to update profile:", err)
+                setFormError("프로필 업데이트에 실패했습니다. 다시 시도해주세요.")
             }
         })
     }
 
     const handleDeleteAccount = () => {
         startDeleteTransition(async () => {
-            setError(null)
+            setFormError(null)
             if (!confirm("정말로 계정을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.")) {
                 return
             }
 
+            console.log("[UserProfileForm] Attempting to delete account...");
             try {
                 await deleteUser();
+                console.log("[UserProfileForm] Delete account API call successful.");
                 await logout();
+                console.log("[UserProfileForm] Logout successful after deletion.");
                 alert("계정이 성공적으로 삭제되었습니다. 로그인 페이지로 이동합니다.")
                 window.location.href = "/login"
             } catch (err) {
-                console.error("Failed to delete account:", err)
-                setError("계정 삭제에 실패했습니다. 다시 시도해주세요.")
+                console.error("[UserProfileForm] Failed to delete account:", err)
+                setFormError("계정 삭제에 실패했습니다. 다시 시도해주세요.")
             }
         })
-    }
-
-    if (isLoading) {
-        return (
-            <div className={styles.container}>
-                <div className={styles.loadingContainer}>
-                    <div className={styles.loadingSpinner}></div>
-                    <p className={styles.loadingText}>프로필 정보를 불러오는 중...</p>
-                </div>
-            </div>
-        )
-    }
-
-    if (!user && !error) {
-        return (
-            <div className={styles.container}>
-                <Card className={styles.card}>
-                    <CardHeader>
-                        <CardTitle>프로필 정보를 찾을 수 없습니다</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <p className={styles.infoText}>로그인 상태를 확인하거나 다시 시도해주세요.</p>
-                        <Button onClick={() => router.push("/login")} className={styles.loginButton}>
-                            로그인 페이지로 이동
-                        </Button>
-                    </CardContent>
-                </Card>
-            </div>
-        )
     }
 
     return (
@@ -160,9 +94,9 @@ export default function UserProfileForm() {
                     <h1 className={styles.title}>내 정보</h1>
                 </div>
 
-                {error && (
+                {formError && (
                     <div className={styles.errorMessage}>
-                        <p>{error}</p>
+                        <p>{formError}</p>
                     </div>
                 )}
 
@@ -183,15 +117,12 @@ export default function UserProfileForm() {
                             <div className={styles.profileDetails}>
                                 <p className={styles.usernameText}>
                                     <User className={styles.iconSmall} />
-                                    {user?.username}
+                                    {userProfile.username}
                                 </p>
                                 <p className={styles.emailText}>
                                     <Mail className={styles.iconSmall} />
-                                    {user?.email}
+                                    {userProfile.email}
                                 </p>
-                                {/*<p className={styles.createdAtText}>
-                                    가입일: {user?.createdAt ? new Date(user.createdAt).toLocaleDateString("ko-KR") : "N/A"}
-                                </p>*/}
                             </div>
                         </div>
                     </CardContent>

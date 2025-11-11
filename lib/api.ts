@@ -39,6 +39,7 @@ async function request<T> ({ requestMethod, endpoint, body, headers}: routeReque
             ...finalHeaders,
             'Cookie': cookieHeader,
         };
+        console.log("[lib/api server-side] Forwarding headers to BFF:", JSON.stringify(finalHeaders));
     }
 
     console.log(`${requestMethod} ${endpoint} ${body}`);

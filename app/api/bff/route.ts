@@ -26,6 +26,8 @@ interface apiBody {
 }
 
 async function apiRequest(req: NextRequest) {
+    console.log("[bff] Received request. Headers:", JSON.stringify(Object.fromEntries(req.headers.entries())));
+
     if (!API_BASE) return NextResponse.json({ error: "API_BASE 설정 누락" }, { status: 500 });
 
     let body: apiBody | null = null;
@@ -49,6 +51,10 @@ async function apiRequest(req: NextRequest) {
         }
         console.log("[bff]endpoint:", endpoint);
         console.log("[bff]data:", data);
+
+        if (endpoint === "/users/me") {
+            console.log("[bff] Processing /users/me request");
+        }
 
         // @description logout 요청 시 백엔드 로그아웃 호출 후 여부 관계없이 쿠키 삭제
         if (endpoint === "/auth/logout") {

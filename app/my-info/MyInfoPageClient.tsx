@@ -1,13 +1,18 @@
 "use client" // 이 파일은 클라이언트 컴포넌트임을 명시
 
-import UserProfileForm from "@/components/(user)/user-profile-form" // 새로 생성할 컴포넌트 임포트
+import UserProfileForm from "@/components/(user)/user-profile-form"
+import type { UserProfile } from "@/types/diary";
 
 /**
- * @file app/my-info/page.tsx
+ * @file app/my-info/MyInfoPageClient.tsx
  * @description 사용자 정보 페이지의 Next.js 클라이언트 컴포넌트.
- *              사용자 프로필 정보를 표시하고 수정, 회원 탈퇴 기능을 제공합니다.
+ *              서버 컴포넌트로부터 받은 사용자 정보를 UserProfileForm으로 전달합니다.
  */
 
-export default function MyInfoPageClient() {
-    return <UserProfileForm />
+interface MyInfoPageClientProps {
+    userProfile: UserProfile;
+}
+
+export default function MyInfoPageClient({ userProfile }: MyInfoPageClientProps) {
+    return <UserProfileForm userProfile={userProfile} />
 }
