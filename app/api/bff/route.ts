@@ -94,6 +94,7 @@ async function apiRequest(req: NextRequest) {
             body: ["POST", "PUT", "PATCH"].includes(method) && data !== undefined ? JSON.stringify(data) : undefined,
         };
 
+        console.log("[bff] Final fetch config:", JSON.stringify(config, null, 2));
         let backendResponse = await fetch(`${API_BASE}${endpoint}`, config);
         if (backendResponse.status === 401 && refreshToken) {
             const reissueRes = await fetch(`${API_BASE}/auth/reissue`, {
