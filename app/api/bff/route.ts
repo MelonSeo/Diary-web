@@ -36,9 +36,9 @@ async function apiRequest(req: NextRequest) {
     }
 
     try {
-        const cookieStore = await cookies();
-        const accessToken = cookieStore.get("accessToken")?.value;
-        const refreshToken = cookieStore.get("refreshToken")?.value;
+        const cookieHeader = req.headers.get("cookie");
+        const accessToken = cookieHeader?.split(';').find(c => c.trim().startsWith('accessToken='))?.split('=')[1];
+        const refreshToken = cookieHeader?.split(';').find(c => c.trim().startsWith('refreshToken='))?.split('=')[1];
 
         const endpoint = body?.endpoint;
         const method = body?.requestMethod;
