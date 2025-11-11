@@ -27,8 +27,6 @@ export default async function MyInfoPage() {
         const serializableUserProfile = {
             ...userProfile,
             id: userProfile.id.toString(),
-            // uid가 있다면 변환
-            ...(userProfile.uid && { uid: userProfile.uid.toString() }),
         };
 
         return <MyInfoPageClient userProfile={serializableUserProfile} />;
