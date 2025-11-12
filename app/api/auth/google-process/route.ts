@@ -62,7 +62,17 @@ try {
     }
 
 
-    const data = await backendRes.json();
+    const backendResText = await backendRes.text();
+    console.log("[google-process] Raw backend login response text:", backendResText);
+
+    if (!backendResText) {
+        console.error("[google-process] Backend login returned an empty response.");
+        const url = new URL("/login", req.nextUrl.origin);
+        url.searchParams.set("error", "Backend returned an empty response.");
+        return NextResponse.redirect(url);
+    }
+
+    const data = JSON.parse(backendResText);
     const accessToken = data.accessToken.toString();
     const refreshToken = data.refreshToken.toString();
 
