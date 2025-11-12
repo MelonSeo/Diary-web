@@ -97,7 +97,15 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: "Backend authentication failed." }, { status: backendLoginResponse.status })
         }
 
-        const backendTokens = await backendLoginResponse.json()
+        const backendLoginResponseText = await backendLoginResponse.text();
+        console.log("[kakao-process] Raw backend login response text:", backendLoginResponseText);
+
+        if (!backendLoginResponseText) {
+            console.error("Backend login returned an empty response.");
+            return NextResponse.json({ error: "Backend returned an empty response." }, { status: 500 });
+        }
+
+        const backendTokens = JSON.parse(backendLoginResponseText);
         const { tokenType, accessToken, refreshToken } = backendTokens
         console.log("Successfully obtained backend JWT tokens.")
 
