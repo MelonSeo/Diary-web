@@ -5,6 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import styles from "@/styles/UserProfileForm.module.css"
 import { AlertTriangle } from "lucide-react"
 
+export const dynamic = 'force-dynamic';
+
 /**
  * @file app/my-info/page.tsx
  * @description 사용자 정보 페이지의 Next.js 서버 컴포넌트.
