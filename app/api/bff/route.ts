@@ -16,8 +16,55 @@ export async function PUT(req: NextRequest) {
 export async function PATCH(req: NextRequest) {
     return apiRequest(req, "PATCH");
 }*/
+
+// CORS configuration
+const allowedOrigins = [
+    'https://diary-web-qyme.vercel.app', // Production
+    'http://localhost:3000', // Local development
+];
+
+const handleCors = (req: NextRequest, response: NextResponse): NextResponse => {
+    const origin = req.headers.get('origin');
+    if (!origin) return response;
+
+    const isAllowed =
+        allowedOrigins.includes(origin) ||
+        (origin.startsWith('https://diary-web-qyme-') && origin.endsWith('.vercel.app'));
+
+    if (isAllowed) {
+        response.headers.set('Access-Control-Allow-Origin', origin);
+        response.headers.set('Access-Control-Allow-Credentials', 'true');
+        response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
+        response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization, Cookie');
+    }
+
+    return response;
+};
+
+export async function OPTIONS(req: NextRequest) {
+    const origin = req.headers.get('origin');
+    const isAllowed =
+        origin &&
+        (allowedOrigins.includes(origin) ||
+            (origin.startsWith('https://diary-web-qyme-') && origin.endsWith('.vercel.app')));
+
+    if (isAllowed) {
+        const headers = {
+            'Access-Control-Allow-Origin': origin,
+            'Access-Control-Allow-Credentials': 'true',
+            'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization, Cookie',
+        };
+        return new NextResponse(null, { status: 204, headers });
+    }
+
+    return new NextResponse(null, { status: 403 });
+}
+
+
 export async function POST(req: NextRequest) {
-    return apiRequest(req);
+    const response = await apiRequest(req);
+    return handleCors(req, response);
 }
 interface apiBody {
     endpoint : string;
