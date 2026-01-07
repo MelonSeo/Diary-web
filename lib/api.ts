@@ -7,6 +7,23 @@ interface routeRequestInit {
     headers?: HeadersInit;
 }
 
+const getBaseUrl = () => {
+    // If running on the client, return an empty string for relative paths
+    if (typeof window !== 'undefined') {
+        return '';
+    }
+
+    // If on the server, construct the absolute URL.
+    if (process.env.NEXT_PUBLIC_VERCEL_URL) {
+        // Vercel-provided URL for server-side environments. Note the use of NEXT_PUBLIC_VERCEL_URL here.
+        // Vercel automatically makes this available.
+        return `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`;
+    }
+
+    // Fallback for local server-side development
+    return 'http://localhost:3000';
+};
+
 const jsonReviver = (key: string, value: any) => {
     if ((key === 'id' || key === 'uid') && value !== null) {
         if (typeof value === 'string' || typeof value === 'number' || (typeof value === 'object' && 'low' in value && 'high' in value)) {
@@ -17,7 +34,7 @@ const jsonReviver = (key: string, value: any) => {
 };
 
 async function request<T> ({ requestMethod, endpoint, body, headers}: routeRequestInit): Promise<T> {
-    const url = `/api/bff`;
+    const url = `${getBaseUrl()}/api/bff`;
 
     let finalHeaders: HeadersInit = headers || {};
 
