@@ -7,14 +7,6 @@ interface routeRequestInit {
     headers?: HeadersInit;
 }
 
-const getBaseUrl = () => {
-    if (process.env.NEXT_PUBLIC_VERCEL_URL) {
-        return `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`;
-    }
-    // Assume localhost for development
-    return 'http://localhost:3000';
-};
-
 const jsonReviver = (key: string, value: any) => {
     if ((key === 'id' || key === 'uid') && value !== null) {
         if (typeof value === 'string' || typeof value === 'number' || (typeof value === 'object' && 'low' in value && 'high' in value)) {
@@ -25,7 +17,7 @@ const jsonReviver = (key: string, value: any) => {
 };
 
 async function request<T> ({ requestMethod, endpoint, body, headers}: routeRequestInit): Promise<T> {
-    const url = `${getBaseUrl()}/api/bff`;
+    const url = `/api/bff`;
 
     let finalHeaders: HeadersInit = headers || {};
 
