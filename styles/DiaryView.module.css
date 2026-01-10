@@ -50,6 +50,7 @@
   margin-top: 2rem;
   line-height: 1.75;
   white-space: pre-wrap; /* Preserves line breaks */
+  word-break: break-word; /* Breaks long words */
   font-size: 1.125rem; /* text-lg */
 }
 
