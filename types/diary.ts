@@ -5,7 +5,7 @@
  */
 
 import Long from "long";
-import {AnalysisStatus, Emotion} from "@/types/enums/diary";
+import {AnalysisStatus, Emotion} from "./enums/diary";
 
 
 /**

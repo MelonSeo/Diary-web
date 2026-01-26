@@ -5,7 +5,7 @@ import styles from '@/styles/DiaryView.module.css';
 import DiaryActions from '@/components/(diary)/diary-actions';
 import { DiaryEntry } from '@/types/diary';
 import { getS3DownloadUrl } from '@/lib/client-api';
-import { AnalysisStatus } from "@/types/enums/diary";
+import { AnalysisStatus } from '../../types/enums/diary';
 
 interface DiaryViewProps {
   diary: DiaryEntry;
