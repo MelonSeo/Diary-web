@@ -87,3 +87,54 @@
   max-height: 70vh;
   object-fit: contain;
 }
+
+/* 감정 분석 섹션 스타일 */
+.analysisSection {
+  margin-top: 2.5rem;
+  padding: 1.5rem;
+  background-color: #f9fafb;
+  border-radius: 0.5rem;
+  border: 1px solid #e5e7eb;
+}
+
+.dark .analysisSection {
+  background-color: #374151;
+  border-color: #4b5563;
+}
+
+.analysisTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.analysisContent p {
+  margin-bottom: 0.5rem;
+}
+
+.emotionDetails {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.dark .emotionDetails {
+  border-color: #4b5563;
+}
+
+.colorInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.colorBox {
+  width: 24px;
+  height: 24px;
+  border-radius: 0.25rem;
+  border: 1px solid #d1d5db;
+}
+
+.dark .colorBox {
+  border-color: #9ca3af;
+}

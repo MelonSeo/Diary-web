@@ -5,20 +5,22 @@
  */
 
 import Long from "long";
+import {AnalysisStatus, Emotion} from "@/types/enums/diary";
+
 
 /**
  * @interface DiaryEntry
  * @description 단일 일기 항목의 데이터 구조를 정의합니다.
  */
 export interface DiaryEntry {
-    id: Long | string // 일기 고유 ID
-    title: string // 일기 제목
-    content: string // 일기 내용
-    imageKey?: string // 일기에 첨부된 이미지 키
-    diaryDate: string // 일기 날짜 (YYYY-MM-DD 형식 문자열)
-    createdAt: string // 일기 생성 날짜 (ISO 8601 형식 문자열)
-    updatedAt: string // 일기 마지막 업데이트 날짜 (ISO 8601 형식 문자열)
-    uid?: Long | string
+    id: Long | string; // 일기의 고유 식별자
+    title: string; // 일기의 제목
+    content: string; // 일기의 내용
+    imageKey?: string | null; // 일기에 첨부된 이미지의 S3 키 (이미지가 없으면 null)
+    diaryDate: string; // 일기 작성 날짜 (YYYY-MM-DD 형식)
+    analysisStatus: AnalysisStatus; // 감정 분석의 현재 상태
+    emotion?: Emotion | null; // 분석된 감정 (analysisStatus가 DONE일 때 유효)
+    colorCode?: string | null; // 분석된 감정에 해당하는 색상 코드 (analysisStatus가 DONE일 때 유효)
 }
 
 /**

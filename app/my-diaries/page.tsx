@@ -69,8 +69,6 @@ export default async function MyDiariesPage({ searchParams }: PageProps) {
         content: diariesData.content.map(diary => ({
             ...diary,
             id: diary.id.toString(),
-            // uid가 있다면 변환
-            ...(diary.uid && { uid: diary.uid.toString() }),
         })),
     };
 

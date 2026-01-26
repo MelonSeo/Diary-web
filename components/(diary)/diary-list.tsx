@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Calendar, ChevronLeft, ChevronRight } from "lucide-react"
 import Link from "next/link"
 import type { DiaryEntry, PaginatedResponse } from "@/types/diary"
+import { AnalysisStatus } from "@/types/enums/diary";
 import styles from "@/styles/DiaryDashboard.module.css"
 
 interface DiaryListProps {
@@ -28,6 +29,35 @@ export default function DiaryList({ diariesData, currentPage }: DiaryListProps) 
         )
     }
 
+    const renderAnalysisStatus = (diary: DiaryEntry) => {
+        switch (diary.analysisStatus) {
+            case AnalysisStatus.DONE:
+                return (
+                    <div
+                        className={styles.analysisIndicator}
+                        style={{ backgroundColor: diary.colorCode || '#ccc' }}
+                        title={`감정: ${diary.emotion || '알 수 없음'}`}
+                    />
+                );
+            case AnalysisStatus.PENDING:
+                return (
+                    <div
+                        className={`${styles.analysisIndicator} ${styles.pending}`}
+                        title="분석 중..."
+                    />
+                );
+            case AnalysisStatus.FAILED:
+                return (
+                    <div
+                        className={`${styles.analysisIndicator} ${styles.failed}`}
+                        title="분석 실패"
+                    >!</div>
+                );
+            default:
+                return null;
+        }
+    };
+
     return (
         <>
             <div className={styles.grid}>
@@ -35,7 +65,10 @@ export default function DiaryList({ diariesData, currentPage }: DiaryListProps) 
                     <Link href={`/my-diaries/${diary.id}`} key={diary.id as React.Key} className={styles.diaryLink}>
                         <Card className={styles.diaryCard}>
                             <CardHeader>
-                                <CardTitle className={styles.diaryTitle}>{diary.title}</CardTitle>
+                                <div className={styles.titleWrapper}>
+                                    <CardTitle className={styles.diaryTitle}>{diary.title}</CardTitle>
+                                    {renderAnalysisStatus(diary)}
+                                </div>
                                 <div className={styles.diaryMeta}>
                                     <Calendar className="w-4 h-4" />
                                     <span>{new Date(diary.diaryDate).toLocaleDateString("ko-KR")}</span>

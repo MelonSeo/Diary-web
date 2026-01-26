@@ -5,6 +5,7 @@ import styles from '@/styles/DiaryView.module.css';
 import DiaryActions from '@/components/(diary)/diary-actions';
 import { DiaryEntry } from '@/types/diary';
 import { getS3DownloadUrl } from '@/lib/client-api';
+import { AnalysisStatus } from "@/types/enums/diary";
 
 interface DiaryViewProps {
   diary: DiaryEntry;
@@ -37,6 +38,50 @@ export default function DiaryView({ diary }: DiaryViewProps) {
     fetchImageUrl();
   }, [diary.imageKey]);
 
+  const renderAnalysisResult = () => {
+    // analysisStatus가 없을 경우 아무것도 렌더링하지 않음
+    if (!diary.analysisStatus) {
+      return null;
+    }
+
+    const getStatusText = (status: AnalysisStatus) => {
+      switch (status) {
+        case AnalysisStatus.PENDING:
+          return "분석 중... 🤔";
+        case AnalysisStatus.DONE:
+          return "분석 완료! ✅";
+        case AnalysisStatus.FAILED:
+          return "분석 실패 😥";
+        default:
+          return "알 수 없음";
+      }
+    };
+
+    return (
+        <section className={styles.analysisSection}>
+          <h2 className={styles.analysisTitle}>감정 분석 결과</h2>
+          <div className={styles.analysisContent}>
+            <p><strong>상태:</strong> {getStatusText(diary.analysisStatus)}</p>
+            {diary.analysisStatus === AnalysisStatus.DONE && diary.emotion && diary.colorCode && (
+                <div className={styles.emotionDetails}>
+                  <p><strong>감정:</strong> {diary.emotion}</p>
+                  <div className={styles.colorInfo}>
+                    <strong>색상 코드:</strong>
+                    <div
+                        className={styles.colorBox}
+                        style={{ backgroundColor: diary.colorCode }}
+                        title={diary.colorCode}
+                    />
+                    <span>{diary.colorCode}</span>
+                  </div>
+                </div>
+            )}
+          </div>
+        </section>
+    );
+  };
+
+
   return (
     <div className={styles.container}>
       <header className={styles.header}>
@@ -54,6 +99,8 @@ export default function DiaryView({ diary }: DiaryViewProps) {
       <article className={styles.content}>
         {diary.content}
       </article>
+
+      {renderAnalysisResult()}
 
       <section className={styles.imageGallery}>
         {isLoading && (

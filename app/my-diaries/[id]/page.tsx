@@ -34,7 +34,6 @@ export default async function DiaryPage({ params }: PageProps) {
     const serializableDiary = {
         ...diary,
         id: diary.id.toString(),
-        ...(diary.uid && { uid: diary.uid.toString() }),
     };
 
     return <DiaryView diary={serializableDiary as DiaryEntry} />;

@@ -38,7 +38,6 @@ export default async function UpdateDiaryPage({ params }: PageProps) {
     const serializableDiary = {
         ...diary,
         id: diary.id.toString(),
-        ...(diary.uid && { uid: diary.uid.toString() }),
     };
 
     return <UpdateDiaryForm initialDiary={serializableDiary as DiaryEntry} />;
