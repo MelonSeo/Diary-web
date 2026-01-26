@@ -39,45 +39,42 @@ export default function DiaryView({ diary }: DiaryViewProps) {
   }, [diary.imageKey]);
 
   const renderAnalysisResult = () => {
-    // analysisStatus가 없을 경우 아무것도 렌더링하지 않음
     if (!diary.analysisStatus) {
       return null;
     }
 
-    const getStatusText = (status: AnalysisStatus) => {
-      switch (status) {
-        case AnalysisStatus.PENDING:
-          return "분석 중... 🤔";
-        case AnalysisStatus.DONE:
-          return "분석 완료! ✅";
-        case AnalysisStatus.FAILED:
-          return "분석 실패 😥";
-        default:
-          return "알 수 없음";
-      }
-    };
+    let resultContent;
+    switch (diary.analysisStatus) {
+      case AnalysisStatus.DONE:
+        if (diary.emotion && diary.colorCode) {
+          resultContent = (
+            <div className={styles.emotionDisplay}>
+              <div className={styles.colorSwatch} style={{ backgroundColor: diary.colorCode }}>
+                <span className={styles.emotionName}>{diary.emotion}</span>
+              </div>
+            </div>
+          );
+        } else {
+          resultContent = <p>분석은 완료되었으나, 감정 데이터를 표시할 수 없습니다. ✅</p>;
+        }
+        break;
+      case AnalysisStatus.PENDING:
+        resultContent = <p>감정 분석이 진행 중입니다... 🤔</p>;
+        break;
+      case AnalysisStatus.FAILED:
+        resultContent = <p>감정 분석에 실패했습니다. 😥</p>;
+        break;
+      default:
+        resultContent = <p>알 수 없는 분석 상태입니다.</p>;
+    }
 
     return (
-        <section className={styles.analysisSection}>
-          <h2 className={styles.analysisTitle}>감정 분석 결과</h2>
-          <div className={styles.analysisContent}>
-            <p><strong>상태:</strong> {getStatusText(diary.analysisStatus)}</p>
-            {diary.analysisStatus === AnalysisStatus.DONE && diary.emotion && diary.colorCode && (
-                <div className={styles.emotionDetails}>
-                  <p><strong>감정:</strong> {diary.emotion}</p>
-                  <div className={styles.colorInfo}>
-                    <strong>색상 코드:</strong>
-                    <div
-                        className={styles.colorBox}
-                        style={{ backgroundColor: diary.colorCode }}
-                        title={diary.colorCode}
-                    />
-                    <span>{diary.colorCode}</span>
-                  </div>
-                </div>
-            )}
-          </div>
-        </section>
+      <section className={styles.analysisSection}>
+        <h2 className={styles.analysisTitle}>감정 분석 결과</h2>
+        <div className={styles.analysisContent}>
+          {resultContent}
+        </div>
+      </section>
     );
   };
 

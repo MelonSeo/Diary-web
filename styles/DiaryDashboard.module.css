@@ -96,13 +96,6 @@
     margin-bottom: 0.5rem;
 }
 
-.titleWrapper {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 0.5rem;
-}
-
 .analysisIndicator {
     width: 14px;
     height: 14px;
@@ -130,11 +123,17 @@
     align-items: center;
     color: #6b7280; /* text-gray-500 */
     font-size: 0.875rem; /* text-sm */
+    gap: 0.5rem;
 }
 
 .diaryMeta span {
-    margin-left: 0.5rem;
+    margin-left: 0;
 }
+
+.metaSeparator {
+    color: #d1d5db; /* gray-300 */
+}
+
 
 .diaryContent {
     color: #374151; /* text-gray-700 */

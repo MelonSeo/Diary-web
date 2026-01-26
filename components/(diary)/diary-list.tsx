@@ -65,13 +65,12 @@ export default function DiaryList({ diariesData, currentPage }: DiaryListProps) 
                     <Link href={`/my-diaries/${diary.id}`} key={diary.id as React.Key} className={styles.diaryLink}>
                         <Card className={styles.diaryCard}>
                             <CardHeader>
-                                <div className={styles.titleWrapper}>
-                                    <CardTitle className={styles.diaryTitle}>{diary.title}</CardTitle>
-                                    {renderAnalysisStatus(diary)}
-                                </div>
+                                <CardTitle className={styles.diaryTitle}>{diary.title}</CardTitle>
                                 <div className={styles.diaryMeta}>
                                     <Calendar className="w-4 h-4" />
                                     <span>{new Date(diary.diaryDate).toLocaleDateString("ko-KR")}</span>
+                                    <span className={styles.metaSeparator}>|</span>
+                                    {renderAnalysisStatus(diary)}
                                 </div>
                             </CardHeader>
                             <CardContent>
