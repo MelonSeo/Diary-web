@@ -15,7 +15,7 @@ export enum AnalysisStatus {
 
 /**
  * @enum Emotion
- * @description 분석된 감정의 종류를 나타내는 열거형입니다.
+ * @description 분석된 감정의 종류와 그에 매핑되는 색상 코드를 정의하는 열거형입니다.
  */
 export enum Emotion {
     JOY="#FFD700",

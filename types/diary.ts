@@ -19,7 +19,7 @@ export interface DiaryEntry {
     imageKey?: string | null; // 일기에 첨부된 이미지의 S3 키 (이미지가 없으면 null)
     diaryDate: string; // 일기 작성 날짜 (YYYY-MM-DD 형식)
     analysisStatus: AnalysisStatus; // 감정 분석의 현재 상태
-    emotion?: Emotion | null; // 분석된 감정 (analysisStatus가 DONE일 때 유효)
+    emotion?: keyof typeof Emotion | null; // 분석된 감정 (analysisStatus가 DONE일 때 유효하며 Emotion enum의 키값)
     colorCode?: string | null; // 분석된 감정에 해당하는 색상 코드 (analysisStatus가 DONE일 때 유효)
 }
 

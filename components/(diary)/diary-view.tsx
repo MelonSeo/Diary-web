@@ -5,7 +5,7 @@ import styles from '@/styles/DiaryView.module.css';
 import DiaryActions from '@/components/(diary)/diary-actions';
 import { DiaryEntry } from '@/types/diary';
 import { getS3DownloadUrl } from '@/lib/client-api';
-import { AnalysisStatus } from '../../types/enums/diary';
+import {AnalysisStatus, Emotion} from '../../types/enums/diary';
 
 interface DiaryViewProps {
   diary: DiaryEntry;
@@ -46,10 +46,11 @@ export default function DiaryView({ diary }: DiaryViewProps) {
     let resultContent;
     switch (diary.analysisStatus) {
       case AnalysisStatus.DONE:
-        if (diary.emotion && diary.colorCode) {
+        if (diary.emotion) {
+          const colorCode = Emotion[diary.emotion] || '#ccc';
           resultContent = (
             <div className={styles.emotionDisplay}>
-              <div className={styles.colorSwatch} style={{ backgroundColor: diary.colorCode }}>
+              <div className={styles.colorSwatch} style={{ backgroundColor: colorCode }}>
                 <span className={styles.emotionName}>{diary.emotion}</span>
               </div>
             </div>

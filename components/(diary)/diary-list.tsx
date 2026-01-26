@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Calendar, ChevronLeft, ChevronRight } from "lucide-react"
 import Link from "next/link"
 import type { DiaryEntry, PaginatedResponse } from "@/types/diary"
-import { AnalysisStatus } from "../../types/enums/diary";
+import {AnalysisStatus, Emotion} from "../../types/enums/diary";
 import styles from "@/styles/DiaryDashboard.module.css"
 
 interface DiaryListProps {
@@ -32,11 +32,13 @@ export default function DiaryList({ diariesData, currentPage }: DiaryListProps) 
     const renderAnalysisStatus = (diary: DiaryEntry) => {
         switch (diary.analysisStatus) {
             case AnalysisStatus.DONE:
+                if (!diary.emotion) return null;
+                const colorCode = Emotion[diary.emotion] || '#ccc';
                 return (
                     <div
                         className={styles.analysisIndicator}
-                        style={{ backgroundColor: diary.colorCode || '#ccc' }}
-                        title={`감정: ${diary.emotion || '알 수 없음'}`}
+                        style={{ backgroundColor: colorCode }}
+                        title={`감정: ${diary.emotion}`}
                     />
                 );
             case AnalysisStatus.PENDING:
