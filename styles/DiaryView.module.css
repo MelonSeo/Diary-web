@@ -106,34 +106,96 @@
   font-size: 1.25rem;
   font-weight: 600;
   margin-bottom: 1rem;
+  color: #333;
 }
 
-.analysisContent p {
-  margin-bottom: 0.5rem;
+.dark .analysisTitle {
+  color: #eee;
 }
 
-.emotionDisplay {
-  margin-top: 1rem;
-}
-
-.colorSwatch {
-  padding: 0.5rem 0.75rem; /* Reduced padding */
-  border-radius: 0.5rem;
-  display: inline-flex; /* Changed to inline-flex for badge-like behavior */
+.analysisContent {
+  display: flex;
   justify-content: center;
   align-items: center;
-  text-align: center;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  min-width: 100px; /* Minimum width for the badge */
-  min-height: 40px; /* Minimum height for the badge */
+  min-height: 100px; /* Ensure content area has some height */
 }
 
-.emotionName {
-  font-size: 1rem; /* Reduced font size */
-  font-weight: 700;
-  color: white;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+.analysisMessage {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1rem;
+  color: #555;
+  background-color: #e0e7ff; /* Light blue background */
+  padding: 1rem 1.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid #c7d2fe;
 }
+
+.dark .analysisMessage {
+  background-color: #4338ca; /* Darker blue background */
+  color: #e0e7ff;
+  border-color: #6366f1;
+}
+
+.analysisEmoji {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.emotionResultCard {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  background-color: #ffffff;
+  border-radius: 0.75rem;
+  border-width: 2px;
+  border-style: solid;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+  width: 100%;
+  max-width: 400px;
+}
+
+.dark .emotionResultCard {
+  background-color: #1f2937;
+  box-shadow: none;
+}
+
+.emotionEmoji {
+  font-size: 2.5rem; /* Larger emoji */
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.emotionTextContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.emotionMainText {
+  font-size: 1.25rem; /* text-xl */
+  font-weight: 700; /* font-bold */
+  color: #333;
+  margin-bottom: 0.25rem;
+}
+
+.dark .emotionMainText {
+  color: #eee;
+}
+
+.emotionLabel {
+  /* Specific styling for the emotion name within the main text */
+}
+
+.emotionDescription {
+  font-size: 0.95rem;
+  color: #666;
+  line-height: 1.4;
+}
+
+.dark .emotionDescription {
+  color: #a0a0a0;
+}
+
 
