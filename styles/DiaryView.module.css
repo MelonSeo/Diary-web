@@ -117,17 +117,19 @@
 }
 
 .colorSwatch {
-  padding: 2rem;
+  padding: 0.5rem 0.75rem; /* Reduced padding */
   border-radius: 0.5rem;
-  display: flex;
+  display: inline-flex; /* Changed to inline-flex for badge-like behavior */
   justify-content: center;
   align-items: center;
   text-align: center;
   border: 1px solid rgba(0, 0, 0, 0.1);
+  min-width: 100px; /* Minimum width for the badge */
+  min-height: 40px; /* Minimum height for the badge */
 }
 
 .emotionName {
-  font-size: 1.5rem;
+  font-size: 1rem; /* Reduced font size */
   font-weight: 700;
   color: white;
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);

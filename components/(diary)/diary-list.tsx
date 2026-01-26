@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Calendar, ChevronLeft, ChevronRight } from "lucide-react"
 import Link from "next/link"
 import type { DiaryEntry, PaginatedResponse } from "@/types/diary"
-import {AnalysisStatus, Emotion} from "../../types/enums/diary";
+import {AnalysisStatus, Emotion} from "@/types/enums/diary";
 import styles from "@/styles/DiaryDashboard.module.css"
 
 interface DiaryListProps {
