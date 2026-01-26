@@ -146,15 +146,15 @@
 .emotionResultCard {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding: 1.25rem 1.5rem;
+  gap: 1.25rem; /* Increased gap for better spacing */
+  padding: 1.5rem 1.75rem; /* Increased padding */
   background-color: #ffffff;
   border-radius: 0.75rem;
-  border-width: 2px;
+  border-width: 4px; /* Increased border thickness */
   border-style: solid;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
   width: 100%;
-  max-width: 400px;
+  max-width: 480px; /* Increased max-width for a larger box */
 }
 
 .dark .emotionResultCard {
@@ -163,7 +163,7 @@
 }
 
 .emotionEmoji {
-  font-size: 2.5rem; /* Larger emoji */
+  font-size: 2.75rem; /* Slightly larger emoji */
   line-height: 1;
   flex-shrink: 0;
 }
@@ -174,8 +174,8 @@
 }
 
 .emotionMainText {
-  font-size: 1.25rem; /* text-xl */
-  font-weight: 700; /* font-bold */
+  font-size: 1.2rem; /* Slightly smaller font */
+  font-weight: 700;
   color: #333;
   margin-bottom: 0.25rem;
 }
@@ -189,7 +189,7 @@
 }
 
 .emotionDescription {
-  font-size: 0.95rem;
+  font-size: 0.9rem; /* Slightly smaller font */
   color: #666;
   line-height: 1.4;
 }
