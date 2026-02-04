@@ -3,16 +3,15 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import UpdateDiaryForm from "@/components/(diary)/update-diary-form";
 import { DiaryEntry } from "@/types/diary";
-import Long from "long";
 
 interface PageProps {
-    params: Promise<{ id: string }>;
+    params: { id: string };
 }
 
 // 동적 메타데이터 생성
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
     try {
-        const { id } = await (params as any);
+        const { id } = params;
         const diary = await getDiary(id);
         return {
             title: `일기 수정: ${diary.title} - 나의 일기장`,
@@ -27,7 +26,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function UpdateDiaryPage({ params }: PageProps) {
-    const { id } = await (params as any);
+    const { id } = params;
 
     const diary = await getDiary(id);
 
@@ -37,7 +36,7 @@ export default async function UpdateDiaryPage({ params }: PageProps) {
 
     const serializableDiary = {
         ...diary,
-        id: diary.id.toString(),
+        diaryId: diary.diaryId.toString(),
     };
 
     return <UpdateDiaryForm initialDiary={serializableDiary as DiaryEntry} />;

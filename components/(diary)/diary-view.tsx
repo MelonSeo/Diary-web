@@ -130,7 +130,7 @@ export default function DiaryView({ diary }: DiaryViewProps) {
             작성일: {diary.diaryDate ? new Date(diary.diaryDate).toLocaleDateString("ko-KR") : "날짜 없음"}
           </span>
           <div className={styles.actions}>
-            <DiaryActions diaryId={diary.id.toString()} />
+            <DiaryActions diaryId={diary.diaryId.toString()} />
           </div>
         </div>
       </header>

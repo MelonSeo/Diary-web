@@ -76,7 +76,7 @@ export default function NewDiaryForm() {
             if (imagePreview) {
                 URL.revokeObjectURL(imagePreview);
             }
-            router.push(`/my-diaries/${newDiary.id}`);
+            router.push(`/my-diaries/${newDiary.diaryId}`);
 
         } catch (err) {
             setError("일기 저장에 실패했습니다. 이미지 업로드 또는 서버 통신에 문제가 발생했을 수 있습니다.");

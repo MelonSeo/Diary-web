@@ -99,10 +99,10 @@ export default function UpdateDiaryForm({ initialDiary }: UpdateDiaryFormProps) 
             }
             // Scenario 3: No change to image, do not send any image-related properties
 
-            const updated = await updateDiary(initialDiary.id as string, dataToUpdate);
+            const updated = await updateDiary(initialDiary.diaryId as string, dataToUpdate);
             
             alert("일기가 성공적으로 수정되었습니다.");
-            router.push(`/my-diaries/${updated.id.toString()}`);
+            router.push(`/my-diaries/${updated.diaryId.toString()}`);
             router.refresh();
 
         } catch (err) {

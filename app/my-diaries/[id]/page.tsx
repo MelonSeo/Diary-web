@@ -2,16 +2,15 @@ import { getDiary } from "@/lib/client-api";
 import type { Metadata } from "next";
 import { DiaryEntry } from "@/types/diary";
 import DiaryView from "@/components/(diary)/diary-view"; // Import the new external component
-import Long from "long";
 
 interface PageProps {
-    params: Promise<{ id: string }>;
+    params: { id: string };
 }
 
 // 동적 메타데이터 생성
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
     try {
-        const { id } = await (params as any);
+        const { id } = params;
         const diary = await getDiary(id);
         return {
             title: `${diary.title} - 나의 일기장`,
@@ -26,14 +25,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function DiaryPage({ params }: PageProps) {
-    const { id } = await (params as any);
+    const { id } = params;
     
     console.log("DiaryPage id:", id);
     const diary = await getDiary(id);
 
     const serializableDiary = {
         ...diary,
-        id: diary.id.toString(),
+        diaryId: diary.diaryId.toString(),
     };
 
     return <DiaryView diary={serializableDiary as DiaryEntry} />;

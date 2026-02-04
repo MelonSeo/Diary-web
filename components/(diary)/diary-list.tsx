@@ -64,7 +64,7 @@ export default function DiaryList({ diariesData, currentPage }: DiaryListProps) 
         <>
             <div className={styles.grid}>
                 {diaries.map((diary) => (
-                    <Link href={`/my-diaries/${diary.id}`} key={diary.id as React.Key} className={styles.diaryLink}>
+                    <Link href={`/my-diaries/${diary.diaryId}`} key={diary.diaryId as React.Key} className={styles.diaryLink}>
                         <Card className={styles.diaryCard}>
                             <CardHeader>
                                 <CardTitle className={styles.diaryTitle}>{diary.title}</CardTitle>

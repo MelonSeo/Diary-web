@@ -25,21 +25,21 @@ export function getClientDiaries(page = 0, limit = 10): Promise<PaginatedRespons
     return get(`/diaries?page=${page}&limit=${limit}`)
 }
 
-export function getDiary(id: string): Promise<DiaryEntry> {
+export function getDiary(diaryId: string): Promise<DiaryEntry> {
     console.log("[client-api]getDiary");
-    return get(`/diaries/${id}`)
+    return get(`/diaries/${diaryId}`)
 }
 
 export function createDiary(data: CreateDiaryRequest): Promise<CreateDiaryResponse> {
     return post("/diaries", data)
 }
 
-export function updateDiary(id: string, data: UpdateDiaryRequest): Promise<CreateDiaryResponse> {
-    return put(`/diaries/${id}`, data)
+export function updateDiary(diaryId: string, data: UpdateDiaryRequest): Promise<CreateDiaryResponse> {
+    return put(`/diaries/${diaryId}`, data)
 }
 
-export function deleteDiary(id: string): Promise<void> {
-    return del(`/diaries/${id}`)
+export function deleteDiary(diaryId: string): Promise<void> {
+    return del(`/diaries/${diaryId}`)
 }
 
 export function getS3PresignedUrl(fileName: string, contentType: string): Promise<{ url: string; key: string; contentType: string; }> {

@@ -4,7 +4,6 @@ import type { Metadata } from "next" // Next.js 메타데이터 타입
 import styles from "@/styles/DiaryDashboard.module.css" // CSS Modules 임포트 (기존 대시보드 스타일 재활용)
 import Link from "next/link" // Next.js 링크 컴포넌트 임포트
 import { Plus } from "lucide-react" // Plus 아이콘 임포트
-import Long from "long";
 import {PaginatedResponse, DiaryEntry} from "@/types/diary";
 
 /**
@@ -68,7 +67,7 @@ export default async function MyDiariesPage({ searchParams }: PageProps) {
         ...diariesData,
         content: diariesData.content.map(diary => ({
             ...diary,
-            id: diary.id.toString(),
+            diaryId: diary.diaryId.toString(),
         })),
     };
 

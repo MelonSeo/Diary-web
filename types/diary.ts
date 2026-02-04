@@ -13,7 +13,7 @@ import {AnalysisStatus, Emotion} from "./enums/diary";
  * @description 단일 일기 항목의 데이터 구조를 정의합니다.
  */
 export interface DiaryEntry {
-    id: Long | string; // 일기의 고유 식별자
+    diaryId: Long | string; // 일기의 고유 식별자
     title: string; // 일기의 제목
     content: string; // 일기의 내용
     imageKey?: string | null; // 일기에 첨부된 이미지의 S3 키 (이미지가 없으면 null)
@@ -36,7 +36,7 @@ export interface CreateDiaryRequest {
 }
 
 export interface CreateDiaryResponse {
-    id: Long | string
+    diaryId: Long | string
 }
 
 /**
