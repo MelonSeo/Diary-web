@@ -5,13 +5,13 @@ import UpdateDiaryForm from "@/components/(diary)/update-diary-form";
 import { DiaryEntry } from "@/types/diary";
 
 interface PageProps {
-    params: { id: string };
+    params: Promise<{ id: string }>;
 }
 
 // 동적 메타데이터 생성
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
     try {
-        const { id } = params;
+        const { id } = await params;
         const diary = await getDiary(id);
         return {
             title: `일기 수정: ${diary.title} - 나의 일기장`,
@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function UpdateDiaryPage({ params }: PageProps) {
-    const { id } = params;
+    const { id } = await params;
 
     const diary = await getDiary(id);
 
