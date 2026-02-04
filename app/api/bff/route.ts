@@ -201,17 +201,20 @@ async function apiRequest(req: NextRequest) {
 
 async function res(backendResponse: Response) {
     const contentType = backendResponse.headers.get("Content-Type") || "";
+    console.log(`[bff] Backend Response Status: ${backendResponse.status} ${backendResponse.statusText}`);
 
     if(!backendResponse.ok) {
         const text = await backendResponse.text().catch(() => "");
+        console.log(`[bff] Backend Error Response Body: ${text}`);
         return NextResponse.json(
             { error: text || backendResponse.statusText },
             { status: backendResponse.status }
         );
     }
 
-    if(contentType === "application/json") {
+    if(contentType.includes("application/json")) {
         const backendJson = await backendResponse.json();
+        console.log("[bff] Backend JSON Response Body:", JSON.stringify(backendJson, null, 2));
         return NextResponse.json(
             backendJson,
             {status: backendResponse.status}
@@ -219,6 +222,7 @@ async function res(backendResponse: Response) {
     }
 
     const backendText = await backendResponse.text();
+    console.log(`[bff] Backend Text Response Body: ${backendText}`);
     return NextResponse.json(
         { data : backendText},
         { status : backendResponse.status}
@@ -228,25 +232,29 @@ async function res(backendResponse: Response) {
 async function resWithCookies(backendResponse: Response, cookieCarrier:NextResponse)  {
     const headers = Object.fromEntries(cookieCarrier.headers); // 새 Set-Cookie 포함
     const contentType = backendResponse.headers.get("Content-Type") || "";
+    console.log(`[bff] Backend Response Status (with cookies): ${backendResponse.status} ${backendResponse.statusText}`);
 
     if (!backendResponse.ok) {
         const text = await backendResponse.text().catch(() => "");
+        console.log(`[bff] Backend Error Response Body (with cookies): ${text}`);
         return new NextResponse(
             JSON.stringify({ error: text || backendResponse.statusText }),
             { status: backendResponse.status, headers: { "Content-Type": "application/json", ...headers } }
         );
     }
 
-    if (contentType === "application/json") {
+    if (contentType.includes("application/json")) {
         const backendJson = await backendResponse.json();
+        console.log("[bff] Backend JSON Response Body (with cookies):", JSON.stringify(backendJson, null, 2));
         return new NextResponse(JSON.stringify(backendJson),{
             status:backendResponse.status,
             headers: {"Content-Type": "application/json", ...headers}
         });
     }
 
-    const backendJson = await backendResponse.text();
-    return new NextResponse(JSON.stringify( {data: backendJson} ), {
+    const backendText = await backendResponse.text();
+    console.log(`[bff] Backend Text Response Body (with cookies): ${backendText}`);
+    return new NextResponse(JSON.stringify( {data: backendText} ), {
         status: backendResponse.status,
         headers: { "Content-Type": "application/json", ...headers }
     });
